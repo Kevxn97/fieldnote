@@ -115,7 +115,7 @@ test("renderTerminalDashboard prints key sections without ANSI when color is dis
     { color: false, width: 84 }
   );
 
-  assert.match(output, /RESEARCH WORKSPACE/);
+  assert.match(output, /DEMO WORKSPACE/);
   assert.match(output, /╭─/);
   assert.match(output, /NEXT ACTIONS/);
   assert.match(output, /RECENT OUTPUTS/);

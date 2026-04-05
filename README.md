@@ -94,17 +94,11 @@ That way daily use stays reasonably fast, while the heavier graph cleanup and cr
 - audit and maintain the wiki over time
 - file strong outputs back into the wiki so they compound
 
-## Main commands
+## Three core workflows
 
-### Daily flow
+### 1. Build the knowledge base
 
-```bash
-kb update
-kb sync
-kb ask "What are the strongest ideas in this source set?" --format report
-```
-
-### Import
+Use this when you are collecting new material and want it turned into structured notes.
 
 ```bash
 kb add /path/to/article.md
@@ -114,21 +108,15 @@ kb clip /path/to/clipped-article.md
 kb clip-latest
 kb add-latest
 kb import-clippings
+kb update
+kb sync
 ```
 
-### Deep maintenance
+`kb update` is the daily inbox command. `kb sync` is the fast incremental refresh when the raw layer already looks right.
 
-```bash
-kb sync --deep
-kb compile
-kb heal
-kb heal --apply
-kb evolve
-kb evolve --rounds 3 --max-pages 6
-kb evolve --until-stable
-```
+### 2. Ask and generate outputs
 
-### Outputs and review
+Use this when you want reusable answers, reports, slide drafts, or chart briefs grounded in the compiled wiki.
 
 ```bash
 kb ask "Summarize the strongest product themes" --format report
@@ -140,7 +128,21 @@ kb review some-source-slug --apply
 kb autoresearch "What contradictions are emerging?" --format report
 ```
 
-### Interactive CLI hub
+### 3. Maintain and improve the graph
+
+Use this when the vault has grown enough that you want a slower, deeper pass across entities, concepts, contradictions, and revision opportunities.
+
+```bash
+kb sync --deep
+kb compile
+kb heal
+kb heal --apply
+kb evolve
+kb evolve --rounds 3 --max-pages 6
+kb evolve --until-stable
+```
+
+## Interactive CLI hub
 
 ```bash
 kb
@@ -161,6 +163,16 @@ The interactive hub is intentionally small and operational. It is there to show 
 - `/open`
 
 It is not meant to be a second note editor.
+
+## Broader capabilities
+
+Beyond the three main workflows, Fieldnote also gives you:
+
+- deterministic navigation artifacts such as `catalog.md`, indexes, and the append-only activity log
+- review queues, contradiction tracking, and revision planning pages under `vault/wiki/system/`
+- the ability to file strong generated outputs back into the wiki
+- Obsidian setup helpers for templates and snippets
+- local clip attachment carry-over into `vault/raw/images/`
 
 ## Quickstart
 
@@ -240,7 +252,7 @@ vault/
 - `src/dashboard-hub.ts` implements the interactive CLI command hub
 - `src/terminal-dashboard.ts` renders the terminal dashboard view
 - there is no web dashboard anymore; Obsidian is the main UI and the terminal hub is the control plane
-- the Python paths in this repo are experimental and not part of the main quickstart
+- the legacy Python implementation has been removed so the public repo stays aligned with the current TypeScript product path
 
 ## Models
 

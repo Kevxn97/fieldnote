@@ -62,7 +62,8 @@ export function renderTerminalDashboard(payload: DashboardPayload, options?: Ter
 
 function banner(payload: DashboardPayload, paint: TerminalPainter, width: number): string {
   const topRule = paint.orange("━".repeat(width));
-  const title = `  ${paint.orange("✦")}  ${paint.bold(paint.orange("RESEARCH WORKSPACE"))}  ${paint.dim("·")}  ${paint.cyan(payload.summary.name)}`;
+  const brand = (payload.summary.name || "Fieldnote").toUpperCase();
+  const title = `  ${paint.orange("✦")}  ${paint.bold(paint.orange(brand))}  ${paint.dim("·")}  ${paint.cyan("research workspace")}`;
   const bottomRule = paint.darkGray("─".repeat(width));
   const narrative = wrapTerminalLine(payload.summary.narrative, width - 4)
     .map((line) => `  ${paint.dim(line)}`)

@@ -132,7 +132,7 @@ export async function buildDashboardPayload(root: string): Promise<DashboardPayl
 
   return {
     summary: {
-      name: config.name || "Research Workbench",
+      name: config.name || "Fieldnote",
       model: `${resolveModelForPhase(config, "ask")} (ask)`,
       health,
       lastSync: latestSyncLabel(buildState),

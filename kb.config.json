@@ -1,5 +1,5 @@
 {
-  "name": "Research Workbench",
+  "name": "Fieldnote",
   "model": "gpt-5.4",
   "directories": {
     "raw": "vault/raw",

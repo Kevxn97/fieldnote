@@ -4,7 +4,7 @@ import { BuildState, KBConfig, ResolvedPaths, SourceRecord, WorkflowPhase } from
 import { ensureDir, readJson, writeJson } from "./utils.js";
 
 export const DEFAULT_CONFIG: KBConfig = {
-  name: "Research Workbench",
+  name: "Fieldnote",
   model: "gpt-5.4",
   directories: {
     raw: "vault/raw",

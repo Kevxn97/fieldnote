@@ -55,7 +55,7 @@ Repo-specific instructions for the `llm-knowledge-base` project.
 - OpenAI Responses API via the official `openai` SDK.
 - Default model split: `compile` and `heal` use `gpt-5.4`; `ask` uses `gpt-5.4-mini`, configurable in `kb.config.json`.
 - `src/*.ts`, especially the CLI, `cli-workflows`, terminal dashboard, and dashboard hub modules, are the canonical implementation path for the current MVP.
-- Python paths in this repo are experimental and should not drive the main quickstart, docs, or verification flow unless explicitly requested.
+- The legacy Python implementation has been removed from the public product path. Do not reintroduce parallel Python sidecars unless the user explicitly asks for them.
 - Obsidian is the primary frontend assumption for the vault. Favor markdown structure, frontmatter, backlinks, and file-based flows over app-only UX.
 
 ## Working rules

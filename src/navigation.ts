@@ -214,10 +214,10 @@ function renderMainIndex(args: {
   return [
     buildFrontmatter({
       kind: "index",
-      title: "Research Workbench",
+      title: "Fieldnote",
       tags: ["index", "home"]
     }).trimEnd(),
-    "# Research Workbench",
+    "# Fieldnote",
     "",
     "## Overview",
     `- Source pages: ${args.sourceEntries.length}`,

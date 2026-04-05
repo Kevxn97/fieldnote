@@ -699,7 +699,7 @@ async function resolveExistingAbsoluteTarget(targetPath: string): Promise<string
 function emptyDashboardPayload(): DashboardPayload {
   return {
     summary: {
-      name: "Research Workbench",
+      name: "Fieldnote",
       model: "gpt-5.4-mini (ask)",
       health: "Empty",
       lastSync: "Not compiled yet",
