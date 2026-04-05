@@ -1,0 +1,28 @@
+{
+  "name": "Research Workbench",
+  "model": "gpt-5.4",
+  "directories": {
+    "raw": "vault/raw",
+    "wiki": "vault/wiki",
+    "outputs": "vault/outputs",
+    "meta": ".kb"
+  },
+  "openai": {
+    "models": {
+      "compile": "gpt-5.4",
+      "ask": "gpt-5.4-mini",
+      "heal": "gpt-5.4",
+      "evolve": "gpt-5.4"
+    },
+    "reasoning": {
+      "compile": "medium",
+      "ask": "medium",
+      "heal": "medium",
+      "evolve": "medium"
+    }
+  },
+  "compile": {
+    "maxSourceChars": 30000,
+    "maxContextChars": 45000
+  }
+}

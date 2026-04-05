@@ -1,0 +1,4 @@
+.callout[data-callout="kb"] {
+  --callout-color: 224, 122, 69;
+  --callout-icon: lucide-brain-circuit;
+}

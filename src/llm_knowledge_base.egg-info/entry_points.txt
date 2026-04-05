@@ -1,0 +1,2 @@
+[console_scripts]
+lkb = llm_kb.cli:app

@@ -1,0 +1,87 @@
+[
+  {
+    "id": "src_introduction-to-obsidian-web-clipper_db77a24f",
+    "slug": "introduction-to-obsidian-web-clipper",
+    "title": "Introduction to Obsidian Web Clipper",
+    "kind": "text",
+    "originalPath": "/Users/kevin/Code/llm-knowledge-base/vault/Clippings/Introduction to Obsidian Web Clipper.md",
+    "storedPath": "raw/clips/introduction-to-obsidian-web-clipper.md",
+    "checksum": "db77a24f6e11ef597bbd93e5fc66557a8c7a14eb0e8fe75c0d32b4cd7bad6eba",
+    "importedAt": "2026-04-05T19:38:05.420Z",
+    "metadata": {
+      "sourceUrl": "https://obsidian.md/help/web-clipper",
+      "created": "2026-04-05",
+      "description": "Introduction to Obsidian Web Clipper - Obsidian Help",
+      "tags": [
+        "clippings"
+      ]
+    },
+    "relatedAssets": []
+  },
+  {
+    "id": "src_a-practical-guide-to-building-agents_701c344e",
+    "slug": "a-practical-guide-to-building-agents",
+    "title": "A practical guide to building agents",
+    "kind": "text",
+    "originalPath": "/Users/kevin/Code/llm-knowledge-base/vault/Clippings/A practical guide to building agents.md",
+    "storedPath": "raw/clips/a-practical-guide-to-building-agents.md",
+    "checksum": "701c344e30f3ad33c593b5ecdd2234211ace2ed9970cf2c222c20d70a1f5c8e9",
+    "importedAt": "2026-04-05T19:38:05.423Z",
+    "metadata": {
+      "sourceUrl": "https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/",
+      "published": "2026-04-02",
+      "created": "2026-04-05",
+      "description": "A comprehensive guide to designing, orchestrating, and deploying AI agents—covering use cases, model selection, tool design, guardrails, and multi-agent patterns.",
+      "tags": [
+        "clippings"
+      ]
+    },
+    "relatedAssets": []
+  },
+  {
+    "id": "src_building-effective-ai-agents_e55112e9",
+    "slug": "building-effective-ai-agents",
+    "title": "Building Effective AI Agents",
+    "kind": "text",
+    "originalPath": "/Users/kevin/Code/llm-knowledge-base/vault/Clippings/Building Effective AI Agents.md",
+    "storedPath": "raw/clips/building-effective-ai-agents.md",
+    "checksum": "e55112e9ff9178dc7e0645f289cf369ed47362fd89a0c1abf9d784b8446b0782",
+    "importedAt": "2026-04-05T19:38:05.424Z",
+    "metadata": {
+      "sourceUrl": "https://www.anthropic.com/engineering/building-effective-agents",
+      "authors": [
+        "Anthropic"
+      ],
+      "published": "2024-12-19",
+      "created": "2026-04-05",
+      "description": "Discover how Anthropic approaches the development of reliable AI agents. Learn about our research on agent capabilities, safety considerations, and technical framework for building trustworthy AI.",
+      "tags": [
+        "clippings"
+      ]
+    },
+    "relatedAssets": []
+  },
+  {
+    "id": "src_learning-chatgpt-and-llms-from-a-former-openai-founding-member_fda4e0a1",
+    "slug": "learning-chatgpt-and-llms-from-a-former-openai-founding-member",
+    "title": "Learning ChatGPT and LLMs from a Former OpenAI Founding Member",
+    "kind": "text",
+    "originalPath": "/Users/kevin/Code/llm-knowledge-base/vault/Clippings/Learning ChatGPT and LLMs from a Former OpenAI Founding Member.md",
+    "storedPath": "raw/clips/learning-chatgpt-and-llms-from-a-former-openai-founding-member.md",
+    "checksum": "fda4e0a1509570168d5f266ef8205cf454eeec7dfa3dbf30d07558287d381844",
+    "importedAt": "2026-04-05T19:38:05.427Z",
+    "metadata": {
+      "sourceUrl": "https://substack.com/home/post/p-157447415",
+      "authors": [
+        "[[JiaKuan Su]]"
+      ],
+      "published": "2025-02-20",
+      "created": "2026-04-05",
+      "description": "Summary of key points from Andrej Karpathy's video, covering the inner working of LLMs",
+      "tags": [
+        "clippings"
+      ]
+    },
+    "relatedAssets": []
+  }
+]

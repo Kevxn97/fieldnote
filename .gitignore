@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+.DS_Store
+.kb/runs
+.venv
+__pycache__
+*.pyc

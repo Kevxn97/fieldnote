@@ -1,0 +1,272 @@
+# Research Workbench
+
+`Research Workbench` is a local-first research workspace for the workflow Andrej Karpathy described: collect source material in `vault/raw/`, let an LLM compile an Obsidian-friendly markdown wiki in `vault/wiki/`, ask rich questions against the wiki, and write the results back into `vault/outputs/`.
+
+The product is intentionally repo-native. Your vault stays as files on disk, not opaque database state. Obsidian should point at `vault/`, while the TypeScript app stays outside the vault so your graph and sidebar stay clean.
+
+## What this MVP ships
+
+- `kb add <path>` is the simplest daily import command for clips, PDFs, repos, and markdown files.
+- `kb add-latest` imports the newest supported file from `vault/Clippings/`.
+- `kb update` imports all supported files from `vault/Clippings/`, carries related local clip assets into `vault/raw/images/`, runs a fast incremental sync, and clears the imported inbox files.
+- `kb update --deep` keeps the same inbox workflow but follows it with a full graph rebuild.
+- `kb sync` is the simplest daily incremental sync command.
+- `kb sync --deep` forces a full graph rebuild across entity and concept pages.
+- `kb ingest <path>` copies local files or directories into `vault/raw/` and registers them in `.kb/sources.json`.
+- `kb compile` turns raw sources into:
+- `wiki/sources/*.md` source pages
+- `wiki/entities/*.md` synthesized entity pages
+- `wiki/concepts/*.md` synthesized concept pages
+- `wiki/system/*.md` deterministic indexes
+- `wiki/system/catalog.md` as the content-oriented wiki catalog
+- `wiki/system/log.md` as the chronological append-only activity log
+- `kb ask "<question>" --format answer|report|slides|chart` writes grounded markdown, Marp, or chart briefs into `vault/outputs/`.
+- `kb review [source]` runs a single-source review pass against the current wiki and writes a readable review into `vault/outputs/reviews/`.
+- `kb review --apply` turns review follow-ups into additive question notes plus a durable `wiki/system/review-queue.md`.
+- `kb autoresearch "<question>" --format report|slides|chart` runs an iterative planner/search/synthesizer loop and writes the result into `vault/outputs/research/`.
+- `kb heal` runs deterministic lint checks plus an LLM audit pass and writes a health report.
+- `kb heal --apply` turns safe heal suggestions into additive wiki changes, including follow-up question notes and draft article pages.
+- `kb evolve` runs a deeper multi-agent maintenance loop: contradiction analysis, graph audit, revision planning, and cross-page entity/concept revisions.
+- `kb evolve --rounds 2 --max-pages 6` lets you push that maintenance loop deeper when the wiki needs stronger global revision.
+- `kb evolve --until-stable` keeps iterating until a quiet round is reached or the cap is hit.
+- `kb search "<query>"` gives you a lightweight CLI search tool that can later be handed to another agent.
+- `kb` now opens an interactive CLI command hub by default when you are in a real terminal.
+- `kb dashboard` opens the same interactive command hub around the vault.
+- `kb dashboard --static` renders the hub once and exits, which is useful for smoke tests or piping output.
+- `kb /dashboard` is a convenience alias if you want the command to feel more slash-command-like.
+- `kb obsidian setup` creates a vault home note and templates without touching personal Obsidian workspace state.
+- `kb obsidian file-output <path>` files strong generated outputs back into `wiki/filed/` so they compound inside the wiki.
+- `kb clip <path>` imports Obsidian Web Clipper markdown into `vault/raw/clips/` and carries local attachment references into `vault/raw/images/`.
+- `kb clip-latest` imports the newest markdown file from `vault/Clippings/`.
+- `kb import-clippings` imports all markdown and PDF files from `vault/Clippings/`.
+- `kb ask ... --file-into-wiki` files a generated answer directly back into the vault.
+
+## Canonical implementation path
+
+The current MVP is TypeScript-first:
+
+- `src/*.ts` is the canonical product path.
+- `src/terminal-dashboard.ts` renders the lightweight CLI dashboard.
+- `src/dashboard-hub.ts` adds the interactive command-hub loop on top of that dashboard.
+- `src/cli-workflows.ts` is the shared action layer used by both Commander commands and the hub.
+- There is no longer a built-in web dashboard; Obsidian is the main UI and the CLI dashboard is the control panel.
+- The Python directories currently in the repo are experimental side paths and are not part of the main quickstart or verification flow.
+
+## Architecture
+
+Main pipeline:
+
+1. `vault/raw/` stores imported source files and repo snapshots.
+2. `kb update` and `kb sync` now run the fast daily path:
+3. Source Summarizer: only changed sources are recompiled.
+4. Targeted Graph Refresh: only entities and concepts touched by those changed sources are rewritten.
+5. Deterministic Editor: source links, catalog/index pages, and navigation artifacts are refreshed.
+6. `kb compile` or `kb sync --deep` runs the full deep graph rebuild when you want every entity and concept page regenerated.
+7. `kb ask` reads the persistent wiki structure first, including the catalog, log, and per-type indexes, then runs a research-oriented answer pass over retrieved wiki pages.
+8. `kb heal` runs deterministic integrity checks and a Knowledge Auditor prompt.
+9. `kb evolve` runs an agent-as-tool style maintenance team: a contradiction analyst, a graph auditor, a revision manager, and a page reviser.
+
+Data layout:
+
+- `vault/raw/files`, `vault/raw/clips`, `vault/raw/repos`, `vault/raw/images`
+- `vault/wiki/sources`, `vault/wiki/entities`, `vault/wiki/concepts`, `vault/wiki/system`
+- `vault/wiki/questions`, `vault/wiki/filed`
+- `vault/outputs/answers`, `vault/outputs/charts`, `vault/outputs/slides`, `vault/outputs/reviews`, `vault/outputs/research`, `vault/outputs/health`
+- `.kb/sources.json` for source manifest
+- `.kb/build-state.json` for incremental compilation state
+
+## Model setup
+
+This repo now uses a split model setup:
+
+- `compile`: `gpt-5.4`
+- `ask`: `gpt-5.4-mini`
+- `heal`: `gpt-5.4`
+- `evolve`: `gpt-5.4`
+
+Reasoning stays:
+
+- `compile`: `medium`
+- `ask`: `medium`
+- `heal`: `medium`
+- `evolve`: `medium`
+
+OpenAI’s GPT-5 guidance recommends the Responses API for GPT-5 workflows because it can carry prior reasoning context more efficiently across turns and improves long-running agent behavior. The official model page for `gpt-5.4-mini` lists the model ID as `gpt-5.4-mini`.
+
+Sources:
+
+- [GPT-5.4 model page](https://developers.openai.com/api/docs/models/gpt-5.4)
+- [GPT-5.4 mini model page](https://developers.openai.com/api/docs/models/gpt-5.4-mini)
+- [Using GPT-5.4](https://developers.openai.com/api/docs/guides/latest-model/)
+- [Responses API reference](https://api.openai.com/v1/responses)
+- [Prompt guidance for GPT-5.4](https://developers.openai.com/api/docs/guides/prompt-guidance/)
+
+## Setup
+
+```bash
+npm install
+cp .env.example .env
+# add OPENAI_API_KEY
+npm run build
+```
+
+Initialize the vault layout:
+
+```bash
+node dist/src/cli.js init
+```
+
+## Quickstart
+
+Import a few local sources:
+
+```bash
+kb add /path/to/article.md
+kb add /path/to/paper.pdf
+kb add /path/to/repo
+```
+
+Import a clipped web article the Obsidian way:
+
+```bash
+kb clip "/path/to/clipped-article.md"
+```
+
+Or, if Obsidian stores everything in `Clippings/`, use the simpler helpers:
+
+```bash
+kb clip-latest
+kb add-latest
+kb import-clippings
+kb update
+```
+
+Run the fast daily sync:
+
+```bash
+kb sync
+```
+
+Run the slower deep rebuild only when you actually want to refresh the full graph:
+
+```bash
+kb sync --deep
+kb compile
+```
+
+Ask a question and write the answer back into the vault:
+
+```bash
+kb ask "What are the strongest product ideas in this research set?" --format report
+kb ask "Give me a 7 slide synthesis of the architecture" --format slides
+kb ask "Show the comparison as a chart-ready brief" --format chart
+kb ask "What changed this week?" --format report --file-into-wiki
+kb review
+kb review "less-is-more-recursive-reasoning-with-tiny-networks" --apply
+kb autoresearch "What contradictions are emerging across the reasoning papers?" --format report --file-into-wiki
+```
+
+Run health checks:
+
+```bash
+node dist/src/cli.js heal
+node dist/src/cli.js heal --apply
+node dist/src/cli.js evolve
+node dist/src/cli.js evolve --rounds 3 --max-pages 6
+node dist/src/cli.js evolve --rounds 5 --max-pages 6 --until-stable
+```
+
+Search the wiki:
+
+```bash
+node dist/src/cli.js search "agent orchestration"
+```
+
+Open the interactive CLI hub:
+
+```bash
+node dist/src/cli.js
+node dist/src/cli.js dashboard
+node dist/src/cli.js dashboard --static
+```
+
+Set up the vault for Obsidian:
+
+```bash
+node dist/src/cli.js obsidian setup
+```
+
+File a strong output back into the wiki:
+
+```bash
+node dist/src/cli.js obsidian file-output outputs/answers/your-answer.md
+```
+
+## Current assumptions and limits
+
+- This MVP is optimized for local files and repo snapshots, not live URL fetching.
+- Clip-linked local images can now be passed into compile as bounded secondary evidence, but this is still not a full general-purpose image ingestion pipeline.
+- The wiki is designed to be maintained by the LLM, while indexes and backlink sections are deterministic.
+- The search engine is intentionally simple and local-first; it is meant to be a building block for future tool use.
+- Obsidian remains the primary reading and editing surface for long-lived notes.
+- The dashboard hub is intentionally thin and terminal-native; it is there to make intake, runs, coverage, and outputs visible without competing with Obsidian.
+
+## Obsidian usage
+
+Open `vault/` as the Obsidian vault. The intended human flow is:
+
+1. Open only `vault/` as the Obsidian vault, not the repo root.
+2. Use Obsidian Web Clipper or local files to collect material into `vault/`.
+3. Use `kb add`, `kb add-latest`, `kb clip-latest`, `kb import-clippings`, or the one-shot `kb update` flow for clipped articles and PDFs in `Clippings/`.
+4. Run `kb update` for the daily inbox flow, or `kb sync` for a fast incremental refresh when the raw layer already looks right.
+5. Use `kb sync --deep`, `kb compile`, or `kb evolve` when you want the slower full-graph maintenance path.
+6. Use `kb` as the operator console when you want a guided prompt for `/import`, `/sync`, `/ask`, `/review`, `/heal`, `/evolve`, `/outputs`, and `/open`.
+7. Open `Home.md` or `wiki/index.md` in Obsidian to browse the living knowledge base.
+8. Generate answers into `outputs/`.
+9. Either use `kb ask ... --file-into-wiki` immediately, or file the best outputs later with `kb obsidian file-output`.
+
+The helper scaffolding lands in real Obsidian paths inside `vault/`:
+
+- `.obsidian/templates/`
+- `.obsidian/snippets/`
+
+For the closest Karpathy-style clipping flow:
+
+- Let Obsidian Web Clipper save markdown into `vault/Clippings/`.
+- In Obsidian, point downloaded clip attachments to `vault/Clippings/_assets/` or keep them in the clip's local subtree.
+- `kb update` will now carry referenced local clip assets into `vault/raw/images/<clip-name>/`, rewrite the copied raw markdown so those links stay usable inside the vault, and pass a few local images into compile as secondary visual evidence.
+
+## Catalog and log
+
+The wiki now keeps two persistent navigation artifacts closer to the pattern in the original text:
+
+- `wiki/system/catalog.md` is the content-oriented catalog. It lists source, concept, question, and filed pages with one-line summaries.
+- `wiki/system/log.md` is the chronological, append-only activity log for ingests, syncs, asks, heals, and filing actions.
+- `wiki/system/source-index.md`, `entity-index.md`, `concept-index.md`, and `question-index.md` are the type-specific indexes that help the LLM navigate the accumulated wiki before drilling into individual pages.
+- `wiki/system/contradictions.md` is the durable contradiction tracker produced by deeper evolution passes.
+- `wiki/system/graph-audit.md` is the durable structural audit page for hub gaps, weak links, and graph cleanup opportunities.
+- `wiki/system/review-queue.md` is the durable backlog for single-source review follow-ups that should be folded into the wiki.
+- `wiki/system/revision-queue.md` is the current cross-page revision plan produced by the manager pass.
+
+`kb ask` now reads these persistent navigation pages before the regular retrieved wiki pages, so the accumulated synthesis gets reused more directly at query time.
+
+## Deeper evolution
+
+`kb evolve` is the slower but more ambitious maintenance pass for when the wiki has grown enough that you want broader editorial upkeep instead of only compile-time synthesis. `kb evolve --until-stable` lets the loop keep going until it reaches a quiet round.
+
+One run currently does this:
+
+1. Contradiction Analyst scans the persistent wiki context for tensions and stale claims.
+2. Graph Auditor looks for weak links, missing hubs, and structural opportunities.
+3. Revision Manager merges those reports into a revision queue.
+4. Page Reviser rewrites a bounded set of existing concept/entity pages using current evidence and the analyst reports.
+5. The loop can run for multiple rounds, carrying forward `contradictions.md`, `graph-audit.md`, and `revision-queue.md` as durable editorial system pages.
+6. When you use `kb review --apply`, strong single-source findings land in `review-queue.md` and `wiki/questions/` so they compound into later maintenance passes.
+
+This is intentionally close to the “agents as tools” orchestration pattern described in OpenAI’s Agents SDK cookbook examples, while still staying inside the repo’s current lightweight Responses API implementation.
+
+## Follow-up ideas
+
+- Add visual ingestion for images with file upload support.
+- Add a true multi-agent runtime with OpenAI Agents SDK once the workflow is locked down.
+- Add live URL ingestion plus explicit web clipping hooks.

@@ -1,0 +1,30 @@
+{
+  "name": "research-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-first research workspace that compiles raw sources into an Obsidian-friendly knowledge graph.",
+  "bin": {
+    "kb": "./dist/src/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "npm run build",
+    "dev": "node --import tsx src/cli.ts",
+    "dashboard": "node dist/src/cli.js dashboard",
+    "start": "node dist/src/cli.js",
+    "test": "node --import tsx --test tests/**/*.test.ts"
+  },
+  "dependencies": {
+    "commander": "^14.0.1",
+    "dotenv": "^16.6.1",
+    "openai": "^5.22.0",
+    "pdf-parse": "^1.1.1",
+    "slugify": "^1.6.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.3"
+  }
+}

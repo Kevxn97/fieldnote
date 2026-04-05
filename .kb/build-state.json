@@ -1,0 +1,276 @@
+{
+  "compiledSources": {
+    "src_introduction-to-obsidian-web-clipper_db77a24f": {
+      "checksum": "db77a24f6e11ef597bbd93e5fc66557a8c7a14eb0e8fe75c0d32b4cd7bad6eba",
+      "pagePath": "wiki/sources/introduction-to-obsidian-web-clipper.md",
+      "compiledAt": "2026-04-05T19:38:22.022Z"
+    },
+    "src_a-practical-guide-to-building-agents_701c344e": {
+      "checksum": "701c344e30f3ad33c593b5ecdd2234211ace2ed9970cf2c222c20d70a1f5c8e9",
+      "pagePath": "wiki/sources/a-practical-guide-to-building-agents.md",
+      "compiledAt": "2026-04-05T19:38:41.774Z"
+    },
+    "src_building-effective-ai-agents_e55112e9": {
+      "checksum": "e55112e9ff9178dc7e0645f289cf369ed47362fd89a0c1abf9d784b8446b0782",
+      "pagePath": "wiki/sources/building-effective-ai-agents.md",
+      "compiledAt": "2026-04-05T19:39:05.122Z"
+    },
+    "src_learning-chatgpt-and-llms-from-a-former-openai-founding-member_fda4e0a1": {
+      "checksum": "fda4e0a1509570168d5f266ef8205cf454eeec7dfa3dbf30d07558287d381844",
+      "pagePath": "wiki/sources/learning-chatgpt-and-llms-from-a-former-openai-founding-member.md",
+      "compiledAt": "2026-04-05T19:39:43.726Z"
+    }
+  },
+  "entityPages": {
+    "Obsidian Web Clipper": {
+      "pagePath": "wiki/entities/obsidian-web-clipper.md",
+      "compiledAt": "2026-04-05T19:39:51.608Z"
+    },
+    "Obsidian Help": {
+      "pagePath": "wiki/entities/obsidian-help.md",
+      "compiledAt": "2026-04-05T19:40:03.667Z"
+    },
+    "Obsidian vault": {
+      "pagePath": "wiki/entities/obsidian-vault.md",
+      "compiledAt": "2026-04-05T19:40:14.032Z"
+    },
+    "Chrome Web Store": {
+      "pagePath": "wiki/entities/chrome-web-store.md",
+      "compiledAt": "2026-04-05T19:40:25.868Z"
+    },
+    "Firefox Add-Ons": {
+      "pagePath": "wiki/entities/firefox-add-ons.md",
+      "compiledAt": "2026-04-05T19:40:35.632Z"
+    },
+    "Safari Extensions": {
+      "pagePath": "wiki/entities/safari-extensions.md",
+      "compiledAt": "2026-04-05T19:40:47.208Z"
+    },
+    "Edge Add-Ons": {
+      "pagePath": "wiki/entities/edge-add-ons.md",
+      "compiledAt": "2026-04-05T19:40:55.912Z"
+    },
+    "obsidianmd/obsidian-clipper": {
+      "pagePath": "wiki/entities/obsidianmdobsidian-clipper.md",
+      "compiledAt": "2026-04-05T19:41:06.872Z"
+    },
+    "**OpenAI**": {
+      "pagePath": "wiki/entities/openai.md",
+      "compiledAt": "2026-04-05T19:41:22.596Z"
+    },
+    "**Agents SDK**": {
+      "pagePath": "wiki/entities/agents-sdk.md",
+      "compiledAt": "2026-04-05T19:41:33.697Z"
+    },
+    "**OpenAI moderation API**": {
+      "pagePath": "wiki/entities/openai-moderation-api.md",
+      "compiledAt": "2026-04-05T19:41:46.089Z"
+    },
+    "**o1**": {
+      "pagePath": "wiki/entities/o1.md",
+      "compiledAt": "2026-04-05T19:42:03.906Z"
+    },
+    "**o3-mini**": {
+      "pagePath": "wiki/entities/o3-mini.md",
+      "compiledAt": "2026-04-05T19:42:21.518Z"
+    },
+    "**WebSearchTool**": {
+      "pagePath": "wiki/entities/websearchtool.md",
+      "compiledAt": "2026-04-05T19:42:36.058Z"
+    },
+    "Anthropic": {
+      "pagePath": "wiki/entities/anthropic.md",
+      "compiledAt": "2026-04-05T19:42:53.875Z"
+    },
+    "Claude Agent SDK": {
+      "pagePath": "wiki/entities/claude-agent-sdk.md",
+      "compiledAt": "2026-04-05T19:43:08.827Z"
+    },
+    "Model Context Protocol": {
+      "pagePath": "wiki/entities/model-context-protocol.md",
+      "compiledAt": "2026-04-05T19:43:19.469Z"
+    },
+    "Strands Agents SDK by AWS": {
+      "pagePath": "wiki/entities/strands-agents-sdk-by-aws.md",
+      "compiledAt": "2026-04-05T19:43:42.253Z"
+    },
+    "Rivet": {
+      "pagePath": "wiki/entities/rivet.md",
+      "compiledAt": "2026-04-05T19:43:53.677Z"
+    },
+    "Vellum": {
+      "pagePath": "wiki/entities/vellum.md",
+      "compiledAt": "2026-04-05T19:44:05.353Z"
+    },
+    "SWE-bench Verified": {
+      "pagePath": "wiki/entities/swe-bench-verified.md",
+      "compiledAt": "2026-04-05T19:44:16.752Z"
+    },
+    "Claude Sonnet 4.5": {
+      "pagePath": "wiki/entities/claude-sonnet-45.md",
+      "compiledAt": "2026-04-05T19:44:35.151Z"
+    },
+    "Andrej Karpathy": {
+      "pagePath": "wiki/entities/andrej-karpathy.md",
+      "compiledAt": "2026-04-05T19:44:52.865Z"
+    },
+    "OpenAI": {
+      "pagePath": "wiki/entities/openai.md",
+      "compiledAt": "2026-04-05T19:45:21.129Z"
+    },
+    "Tesla": {
+      "pagePath": "wiki/entities/tesla.md",
+      "compiledAt": "2026-04-05T19:45:35.261Z"
+    },
+    "Eureka Labs": {
+      "pagePath": "wiki/entities/eureka-labs.md",
+      "compiledAt": "2026-04-05T19:45:50.722Z"
+    },
+    "FineWeb": {
+      "pagePath": "wiki/entities/fineweb.md",
+      "compiledAt": "2026-04-05T19:46:06.336Z"
+    },
+    "GPT-2": {
+      "pagePath": "wiki/entities/gpt-2.md",
+      "compiledAt": "2026-04-05T19:46:31.837Z"
+    },
+    "Llama 3": {
+      "pagePath": "wiki/entities/llama-3.md",
+      "compiledAt": "2026-04-05T19:46:47.145Z"
+    },
+    "InstructGPT": {
+      "pagePath": "wiki/entities/instructgpt.md",
+      "compiledAt": "2026-04-05T19:47:01.915Z"
+    }
+  },
+  "conceptPages": {
+    "web clipping": {
+      "pagePath": "wiki/concepts/web-clipping.md",
+      "compiledAt": "2026-04-05T19:47:18.326Z"
+    },
+    "local-first saving": {
+      "pagePath": "wiki/concepts/local-first-saving.md",
+      "compiledAt": "2026-04-05T19:47:35.273Z"
+    },
+    "browser extension distribution": {
+      "pagePath": "wiki/concepts/browser-extension-distribution.md",
+      "compiledAt": "2026-04-05T19:47:51.990Z"
+    },
+    "highlighting": {
+      "pagePath": "wiki/concepts/highlighting.md",
+      "compiledAt": "2026-04-05T19:48:07.631Z"
+    },
+    "reader mode": {
+      "pagePath": "wiki/concepts/reader-mode.md",
+      "compiledAt": "2026-04-05T19:48:22.444Z"
+    },
+    "natural language page interpretation": {
+      "pagePath": "wiki/concepts/natural-language-page-interpretation.md",
+      "compiledAt": "2026-04-05T19:48:36.200Z"
+    },
+    "template variables and filters": {
+      "pagePath": "wiki/concepts/template-variables-and-filters.md",
+      "compiledAt": "2026-04-05T19:48:55.245Z"
+    },
+    "template logic": {
+      "pagePath": "wiki/concepts/template-logic.md",
+      "compiledAt": "2026-04-05T19:49:11.222Z"
+    },
+    "**AI agents**": {
+      "pagePath": "wiki/concepts/ai-agents.md",
+      "compiledAt": "2026-04-05T19:49:32.422Z"
+    },
+    "**Workflow execution**": {
+      "pagePath": "wiki/concepts/workflow-execution.md",
+      "compiledAt": "2026-04-05T19:49:47.474Z"
+    },
+    "**Single-agent systems**": {
+      "pagePath": "wiki/concepts/single-agent-systems.md",
+      "compiledAt": "2026-04-05T19:50:01.671Z"
+    },
+    "**Multi-agent systems**": {
+      "pagePath": "wiki/concepts/multi-agent-systems.md",
+      "compiledAt": "2026-04-05T19:50:15.751Z"
+    },
+    "**Manager pattern**": {
+      "pagePath": "wiki/concepts/manager-pattern.md",
+      "compiledAt": "2026-04-05T19:50:30.948Z"
+    },
+    "**Decentralized handoffs**": {
+      "pagePath": "wiki/concepts/decentralized-handoffs.md",
+      "compiledAt": "2026-04-05T19:50:43.995Z"
+    },
+    "**Guardrails**": {
+      "pagePath": "wiki/concepts/guardrails.md",
+      "compiledAt": "2026-04-05T19:51:01.199Z"
+    },
+    "**Human intervention**": {
+      "pagePath": "wiki/concepts/human-intervention.md",
+      "compiledAt": "2026-04-05T19:51:16.354Z"
+    },
+    "Agentic systems": {
+      "pagePath": "wiki/concepts/agentic-systems.md",
+      "compiledAt": "2026-04-05T19:51:31.614Z"
+    },
+    "Augmented LLM": {
+      "pagePath": "wiki/concepts/augmented-llm.md",
+      "compiledAt": "2026-04-05T19:51:45.979Z"
+    },
+    "Prompt chaining": {
+      "pagePath": "wiki/concepts/prompt-chaining.md",
+      "compiledAt": "2026-04-05T19:52:06.943Z"
+    },
+    "Routing": {
+      "pagePath": "wiki/concepts/routing.md",
+      "compiledAt": "2026-04-05T19:52:27.632Z"
+    },
+    "Parallelization": {
+      "pagePath": "wiki/concepts/parallelization.md",
+      "compiledAt": "2026-04-05T19:52:40.937Z"
+    },
+    "Orchestrator-workers": {
+      "pagePath": "wiki/concepts/orchestrator-workers.md",
+      "compiledAt": "2026-04-05T19:53:04.594Z"
+    },
+    "Evaluator-optimizer": {
+      "pagePath": "wiki/concepts/evaluator-optimizer.md",
+      "compiledAt": "2026-04-05T19:53:25.253Z"
+    },
+    "Agent-computer interface (ACI)": {
+      "pagePath": "wiki/concepts/agent-computer-interface-aci.md",
+      "compiledAt": "2026-04-05T19:53:45.040Z"
+    },
+    "Next-token prediction": {
+      "pagePath": "wiki/concepts/next-token-prediction.md",
+      "compiledAt": "2026-04-05T19:54:05.622Z"
+    },
+    "Tokenization": {
+      "pagePath": "wiki/concepts/tokenization.md",
+      "compiledAt": "2026-04-05T19:54:28.795Z"
+    },
+    "Sampling vs. greedy decoding": {
+      "pagePath": "wiki/concepts/sampling-vs-greedy-decoding.md",
+      "compiledAt": "2026-04-05T19:54:57.025Z"
+    },
+    "Pre-training": {
+      "pagePath": "wiki/concepts/pre-training.md",
+      "compiledAt": "2026-04-05T19:55:12.899Z"
+    },
+    "Supervised fine-tuning": {
+      "pagePath": "wiki/concepts/supervised-fine-tuning.md",
+      "compiledAt": "2026-04-05T19:55:28.626Z"
+    },
+    "In-context learning": {
+      "pagePath": "wiki/concepts/in-context-learning.md",
+      "compiledAt": "2026-04-05T19:55:47.612Z"
+    },
+    "Retrieval-Augmented Generation": {
+      "pagePath": "wiki/concepts/retrieval-augmented-generation.md",
+      "compiledAt": "2026-04-05T19:56:05.225Z"
+    },
+    "Reinforcement learning": {
+      "pagePath": "wiki/concepts/reinforcement-learning.md",
+      "compiledAt": "2026-04-05T19:56:22.634Z"
+    }
+  }
+}

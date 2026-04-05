@@ -1,0 +1,22 @@
+[project]
+name = "Research Vault"
+model = "gpt-5.4"
+
+[paths]
+raw = "raw"
+wiki = "wiki"
+outputs = "outputs"
+cache = ".cache"
+
+[compile]
+concurrency = 3
+max_source_chars = 16000
+reasoning_effort = "medium"
+
+[ask]
+top_k = 6
+reasoning_effort = "medium"
+
+[heal]
+top_k = 10
+reasoning_effort = "medium"
