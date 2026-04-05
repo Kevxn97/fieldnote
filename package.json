@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Local-first research workspace that compiles raw sources into an Obsidian-friendly knowledge graph.",
+  "description": "File-based research workspace that compiles raw sources into an Obsidian-friendly knowledge graph.",
   "bin": {
     "kb": "./dist/src/cli.js"
   },

@@ -18,7 +18,7 @@ The idea is simple: instead of asking one-off questions against random files, bu
 
 Fieldnote is:
 
-- a local-first workflow in the sense that your data, vault structure, outputs, and build state live as files on disk
+- a file-based workflow where your data, vault structure, outputs, and build state live on disk
 - an Obsidian-friendly markdown knowledge graph made of sources, entities, concepts, questions, and filed outputs
 - an interactive CLI hub for running the workflow from the terminal
 - an OpenAI-powered compiler and synthesis layer on top of that file-based vault
@@ -272,7 +272,7 @@ That split is configurable in `kb.config.json`.
 ## Current limits
 
 - this is still an opinionated side project, not a polished product
-- the system is local-first in data and workflow, but model inference still runs through OpenAI
+- the system is file-based and runs locally, but model inference runs through OpenAI
 - PDF ingestion can be noisier than plain markdown depending on the source file
 - the graph refresh is incremental now, but larger vaults can still take a while on sync
 - the terminal hub is intentionally narrow and should stay an operator console, not a full TUI note-taking app
@@ -284,7 +284,7 @@ This project is interesting to share precisely because it is not a generic AI wr
 
 It is a concrete experiment in:
 
-- local-first AI workflows
+- file-based AI workflows
 - Obsidian-compatible knowledge systems
 - persistent research tooling
 - CLI-first operator UX

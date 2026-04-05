@@ -2,7 +2,7 @@
 Repo-specific instructions for the `llm-knowledge-base` project.
 
 ## Product shape
-- This repo is a local-first knowledge-base compiler for Obsidian-style vaults.
+- This repo is a file-based knowledge-base compiler for Obsidian-style vaults.
 - `vault/` is the only intended Obsidian-visible surface.
 - `vault/raw/` stores imported source material.
 - `vault/Clippings/_assets/` is the preferred Obsidian Web Clipper attachment inbox when users want local image capture alongside clipped markdown.

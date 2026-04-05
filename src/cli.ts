@@ -29,7 +29,7 @@ const program = new Command();
 
 program
   .name("kb")
-  .description("Local-first research workspace for raw sources, compiled wiki knowledge, and reusable outputs.")
+  .description("File-based research workspace for raw sources, compiled wiki knowledge, and reusable outputs.")
   .version("0.1.0")
   .action(async () => {
     await startDashboardHub(process.cwd());
