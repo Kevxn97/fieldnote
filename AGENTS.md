@@ -1,5 +1,5 @@
 # Purpose
-Repo-specific instructions for the `llm-knowledge-base` project.
+Repo-specific instructions for the `fieldnote` project.
 
 ## Product shape
 - This repo is a file-based knowledge-base compiler for Obsidian-style vaults.
