@@ -14,7 +14,7 @@ Requires-Dist: pytest>=8.2; extra == "dev"
 
 # LLM Knowledge Base
 
-`llm-knowledge-base` is a local-first research workspace for the workflow Andrej Karpathy described: collect source material in `vault/raw/`, let an LLM compile an Obsidian-friendly markdown wiki in `vault/wiki/`, ask rich questions against the wiki, and write the results back into `vault/outputs/`.
+`llm-knowledge-base` is a local-first research workspace: collect source material in `vault/raw/`, let an LLM compile an Obsidian-friendly markdown wiki in `vault/wiki/`, ask rich questions against the wiki, and write the results back into `vault/outputs/`.
 
 The product is intentionally repo-native. Your vault stays as files on disk, not opaque database state. Obsidian should point at `vault/`, while the TypeScript app stays outside the vault so your graph and sidebar stay clean.
 
@@ -234,7 +234,7 @@ The helper scaffolding lands in real Obsidian paths inside `vault/`:
 - `.obsidian/templates/`
 - `.obsidian/snippets/`
 
-For the closest Karpathy-style clipping flow:
+For the closest clipping flow:
 
 - Let Obsidian Web Clipper save markdown into `vault/Clippings/`.
 - In Obsidian, point downloaded clip attachments to `vault/Clippings/_assets/` or keep them in the clip's local subtree.

@@ -5,7 +5,7 @@ Repo-specific instructions for the `llm-knowledge-base` project.
 - This repo is a local-first knowledge-base compiler for Obsidian-style vaults.
 - `vault/` is the only intended Obsidian-visible surface.
 - `vault/raw/` stores imported source material.
-- `vault/Clippings/_assets/` is the preferred Obsidian Web Clipper attachment inbox when users want Karpathy-style local image capture.
+- `vault/Clippings/_assets/` is the preferred Obsidian Web Clipper attachment inbox when users want local image capture alongside clipped markdown.
 - Obsidian clip imports should preserve referenced local attachments by copying them into `vault/raw/images/<clip-slug>/` and keeping the copied raw markdown links usable.
 - `vault/wiki/` stores compiled markdown knowledge pages.
 - `wiki/system/catalog.md` is the persistent content-oriented catalog.

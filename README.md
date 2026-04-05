@@ -2,6 +2,8 @@
 
 Fieldnote is a file-based research workspace for people who like the idea of an LLM-powered knowledge system, but do not want their notes trapped inside a chat app or opaque database.
 
+The overall shape was motivated by Andrej Karpathy's idea of treating personal research more like a living, accumulating system than a pile of disconnected notes.
+
 It sits on top of an Obsidian-style vault:
 
 - raw sources go into `vault/raw/` or `vault/Clippings/`
