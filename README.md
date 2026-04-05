@@ -90,8 +90,8 @@ That way daily use stays reasonably fast, while the heavier graph cleanup and cr
 - answer questions against the compiled wiki
 - generate reusable outputs such as reports, slide drafts, and chart briefs
 - review a single source against the current knowledge base
-- run deeper iterative research loops
-- audit and maintain the wiki over time
+- run a deeper iterative research workflow when simple retrieval is not enough
+- run health audits and broader maintenance passes over the wiki
 - file strong outputs back into the wiki so they compound
 
 ## Three core workflows
@@ -142,6 +142,8 @@ kb evolve --rounds 3 --max-pages 6
 kb evolve --until-stable
 ```
 
+`kb heal` is a health audit plus additive follow-up suggestions. `kb evolve` is an experimental deeper maintenance pass for larger vaults, not the default daily path.
+
 ## Interactive CLI hub
 
 ```bash
@@ -173,6 +175,7 @@ Beyond the three main workflows, Fieldnote also gives you:
 - the ability to file strong generated outputs back into the wiki
 - Obsidian setup helpers for templates and snippets
 - local clip attachment carry-over into `vault/raw/images/`
+- a more experimental iterative research mode (`kb autoresearch`) for broader synthesis passes
 
 ## Quickstart
 
@@ -272,6 +275,7 @@ That split is configurable in `kb.config.json`.
 - PDF ingestion can be noisier than plain markdown depending on the source file
 - the graph refresh is incremental now, but larger vaults can still take a while on sync
 - the terminal hub is intentionally narrow and should stay an operator console, not a full TUI note-taking app
+- the deeper workflows such as `kb autoresearch`, `kb heal --apply`, and `kb evolve` are useful, but they should still be read as experimental MVP features rather than production-hardened automation
 
 ## Why the repo is public
 

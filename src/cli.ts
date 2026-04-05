@@ -168,7 +168,7 @@ program
 program
   .command("autoresearch")
   .alias("research")
-  .description("Run a broader iterative research loop: plan subqueries, search the wiki, and synthesize a report, deck, or chart.")
+  .description("Run an experimental broader research workflow: plan subqueries, search the wiki, and synthesize a report, deck, or chart.")
   .argument("<question>", "Research question")
   .option("-f, --format <format>", "report | slides | chart", "report")
   .option("-t, --title <title>", "Override the generated output title")
@@ -205,15 +205,15 @@ program
 
 program
   .command("heal")
-  .description("Run deterministic integrity checks plus an LLM audit pass over the current wiki.")
-  .option("--apply", "Create additive follow-up question notes and draft article pages from the heal report")
+  .description("Run deterministic integrity checks plus a wiki health audit over the current wiki.")
+  .option("--apply", "Create additive follow-up question notes and draft article pages from the health audit")
   .action(async (options: { apply?: boolean }) => {
     await printWorkflow(runHealWorkflow(process.cwd(), { apply: options.apply }));
   });
 
 program
   .command("evolve")
-  .description("Run a deeper multi-agent wiki maintenance loop: contradictions, graph audit, revision plan, and cross-page updates.")
+  .description("Run an experimental deeper wiki maintenance pass: contradictions, graph audit, revision plan, and cross-page updates.")
   .option("--max-pages <count>", "Maximum number of concept/entity pages to revise in one run", "4")
   .option("--rounds <count>", "Number of iterative maintenance rounds to run", "2")
   .option("--until-stable", "Keep iterating until a quiet round is reached or the round cap is hit")

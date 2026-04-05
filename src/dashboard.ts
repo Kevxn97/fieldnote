@@ -402,13 +402,13 @@ function buildNextActions(args: {
   } else if (args.questionCount > 0) {
     actions.push({
       title: "Resolve an open question",
-      detail: "Use the wiki's own follow-up queue to decide what to synthesize next.",
+      detail: "Use the wiki's own follow-up queue to decide what to synthesize next with a broader research pass.",
       command: 'kb autoresearch "What contradictions should I resolve next?" --format report'
     });
   } else {
     actions.push({
       title: "Deepen the graph",
-      detail: "Run a broader maintenance loop when the workspace already has enough material to revise.",
+      detail: "Run a broader maintenance pass when the workspace already has enough material to revise.",
       command: "kb evolve --rounds 2 --max-pages 6"
     });
   }
