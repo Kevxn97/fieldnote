@@ -353,7 +353,7 @@ function inferWorkspaceNarrative(args: {
   if (args.questionCount > 0) {
     return "The workspace is active and already surfacing follow-up questions worth resolving in the next run.";
   }
-  return "Sources, wiki pages, and reusable outputs are all in motion. This is ready to demo as a local-first research workspace.";
+  return "Sources, wiki pages, and reusable outputs are all in motion. This is ready to demo as a file-based research workspace.";
 }
 
 function buildNextActions(args: {
