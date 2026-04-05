@@ -1,6 +1,7 @@
 # Fieldnote
 
 Fieldnote is a file-based research workspace for people who like the idea of an LLM-powered knowledge system, but do not want their notes trapped inside a chat app or opaque database.
+<img width="792" height="577" alt="Bildschirmfoto 2026-04-05 um 22 53 14" src="https://github.com/user-attachments/assets/9437000b-3547-4431-a27f-803d219cf30b" />
 
 The overall shape was motivated by Andrej Karpathy's idea of treating personal research more like a living, accumulating system than a pile of disconnected notes.
 
