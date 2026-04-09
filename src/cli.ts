@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { startDashboardHub } from "./dashboard-hub.js";
+import { runWatchWorkflow } from "./watch-mode.js";
 import {
   runAddLatestWorkflow,
   runAddWorkflow,
@@ -140,11 +141,13 @@ program
   .description("Review one source against the current wiki. With no argument, reviews the most recently imported source.")
   .argument("[source]", "Source id, slug, title, stored path, or original path")
   .option("--apply", "Turn review suggestions into additive follow-up notes and review-queue entries")
-  .action(async (sourceSelector: string | undefined, options: { apply?: boolean }) => {
+  .option("--budget <chars>", "Cap the retrieved review context size in characters")
+  .action(async (sourceSelector: string | undefined, options: { apply?: boolean; budget?: string }) => {
     await printWorkflow(
       runReviewWorkflow(process.cwd(), {
         sourceSelector,
-        apply: options.apply
+        apply: options.apply,
+        budgetChars: options.budget ? Number(options.budget) : undefined
       })
     );
   });
@@ -154,13 +157,15 @@ program
   .description("Answer a question against the compiled wiki and write the result into outputs/.")
   .argument("<question>", "Research question")
   .option("-f, --format <format>", "answer | report | slides | chart", "answer")
+  .option("--budget <chars>", "Cap the retrieved prompt context size in characters")
   .option("--file-into-wiki", "Also file the generated answer back into wiki/filed for Obsidian")
-  .action(async (question: string, options: { format: AskFormat; fileIntoWiki?: boolean }) => {
+  .action(async (question: string, options: { format: AskFormat; fileIntoWiki?: boolean; budget?: string }) => {
     await printWorkflow(
       runAskWorkflow(process.cwd(), {
         question,
         format: options.format,
-        fileIntoWiki: options.fileIntoWiki
+        fileIntoWiki: options.fileIntoWiki,
+        budgetChars: options.budget ? Number(options.budget) : undefined
       })
     );
   });
@@ -175,6 +180,7 @@ program
   .option("--rounds <count>", "Planner/search rounds to run", "2")
   .option("--max-subqueries <count>", "Maximum subqueries per round", "5")
   .option("--max-results-per-query <count>", "Maximum retrieved pages per subquery", "6")
+  .option("--budget <chars>", "Cap the initial grounding context size in characters")
   .option("--file-into-wiki", "Also file the generated research output back into wiki/filed")
   .action(
     async (
@@ -185,6 +191,7 @@ program
         rounds: string;
         maxSubqueries: string;
         maxResultsPerQuery: string;
+        budget?: string;
         fileIntoWiki?: boolean;
       }
     ) => {
@@ -196,6 +203,7 @@ program
           rounds: Number(options.rounds),
           maxSubqueries: Number(options.maxSubqueries),
           maxResultsPerQuery: Number(options.maxResultsPerQuery),
+          budgetChars: options.budget ? Number(options.budget) : undefined,
           fileIntoWiki: options.fileIntoWiki,
           progress: (message) => console.log(`[autoresearch] ${message}`)
         })
@@ -247,6 +255,15 @@ program
   .description("Show current source and wiki counts.")
   .action(async () => {
     await printWorkflow(runStatusWorkflow(process.cwd()));
+  });
+
+program
+  .command("watch")
+  .description("Watch Clippings and raw for changes, debounce them, and run the fast incremental refresh flow.")
+  .action(async () => {
+    await runWatchWorkflow(process.cwd(), {
+      progress: (message) => console.log(`[watch] ${message}`)
+    });
   });
 
 program

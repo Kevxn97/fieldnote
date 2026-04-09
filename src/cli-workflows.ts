@@ -1,7 +1,9 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { runAutoresearch } from "./autoresearch.js";
+import { writeWorkspaceBrief } from "./brief.js";
 import { initializeProject, loadSources, saveSources } from "./config.js";
+import { writeContextPack } from "./context-pack.js";
 import { appendLogEntry, refreshNavigationArtifacts } from "./navigation.js";
 import { fileOutputIntoWiki, setupObsidianWorkspace } from "./obsidian.js";
 import { applySourceReviewSuggestions, reviewSourceRecord } from "./review.js";
@@ -13,7 +15,7 @@ import {
   listImportableClippingFiles,
 } from "./source.js";
 import { AskFormat, ResolvedPaths, SourceRecord } from "./types.js";
-import { walkFiles } from "./utils.js";
+import { uniqueStrings, walkFiles } from "./utils.js";
 import {
   answerQuestion,
   compileKnowledgeBase,
@@ -24,6 +26,7 @@ import {
 
 export interface WorkflowRunResult {
   lines: string[];
+  watchPaths?: string[];
 }
 
 export type ProgressReporter = (message: string) => void;
@@ -208,7 +211,7 @@ export async function runImportClippingsWorkflow(
 
 export async function runUpdateWorkflow(
   root: string,
-  options?: { dir?: string; progress?: ProgressReporter; deep?: boolean }
+  options?: { dir?: string; progress?: ProgressReporter; deep?: boolean; onWatchPaths?: (paths: string[]) => void }
 ): Promise<WorkflowRunResult> {
   const { config, paths } = await initializeProject(root);
   const clippingsDir = resolveClippingsDir(root, paths, options?.dir ?? "");
@@ -216,6 +219,7 @@ export async function runUpdateWorkflow(
   const files = await listImportableClippingFiles(clippingsDir);
   const importedOriginals: string[] = [];
   const importedStored: string[] = [];
+  const watchPaths = new Set<string>();
 
   let sources = await loadSources(paths);
 
@@ -236,6 +240,12 @@ export async function runUpdateWorkflow(
       sources.push(source);
       importedOriginals.push(...result.consumedPaths);
       importedStored.push(source.storedPath);
+      watchPaths.add(path.resolve(entry.file));
+      watchPaths.add(path.join(paths.vaultDir, source.storedPath));
+      for (const assetPath of source.relatedAssets ?? []) {
+        watchPaths.add(path.join(paths.vaultDir, assetPath));
+      }
+      options?.onWatchPaths?.(uniqueStrings([...watchPaths]));
     }
 
     await saveSources(paths, sources);
@@ -255,7 +265,11 @@ export async function runUpdateWorkflow(
   });
   if (importedOriginals.length > 0) {
     options?.progress?.("Cleaning imported clipping files");
+    options?.onWatchPaths?.(uniqueStrings(importedOriginals.map((original) => path.resolve(original))));
     await removeImportedClippings(clippingsDir, importedOriginals);
+    for (const original of importedOriginals) {
+      watchPaths.add(path.resolve(original));
+    }
   }
 
   const lines: string[] = [];
@@ -269,8 +283,9 @@ export async function runUpdateWorkflow(
   lines.push(
     `Cleaned ${importedOriginals.length} clipping file(s) from ${path.relative(root, clippingsDir) || clippingsDir}`
   );
+  lines.push(`Updated ${await writeWorkspaceBrief(root)}`);
 
-  return { lines };
+  return { lines, watchPaths: uniqueStrings([...watchPaths]) };
 }
 
 export async function runCompileWorkflow(
@@ -291,7 +306,7 @@ export async function runCompileWorkflow(
   });
 
   return {
-    lines: formatCompileLines("Compiled", result)
+    lines: [...formatCompileLines("Compiled", result), `Updated ${await writeWorkspaceBrief(root)}`]
   };
 }
 
@@ -315,17 +330,31 @@ export async function runSyncWorkflow(
   });
 
   return {
-    lines: formatCompileLines("Synced", result)
+    lines: [...formatCompileLines("Synced", result), `Updated ${await writeWorkspaceBrief(root)}`]
   };
 }
 
 export async function runReviewWorkflow(
   root: string,
-  options?: { sourceSelector?: string; apply?: boolean }
+  options?: { sourceSelector?: string; apply?: boolean; budgetChars?: number }
 ): Promise<WorkflowRunResult> {
   const { config, paths } = await initializeProject(root);
   const source = await resolveSourceSelection(paths, options?.sourceSelector);
-  const { context } = await buildAskContext(paths, source.title, Math.min(config.compile.maxContextChars, 30000));
+  const { context, pack } = await buildAskContext(
+    paths,
+    source.title,
+    options?.budgetChars ?? Math.min(config.compile.maxContextChars, 30_000)
+  );
+  const contextPack = await writeContextPack({
+    paths,
+    summary: {
+      workflow: "review",
+      createdAt: new Date().toISOString(),
+      title: `Review: ${source.title}`,
+      ...pack
+    },
+    context
+  });
   const result = await reviewSourceRecord({
     config,
     paths,
@@ -374,13 +403,15 @@ export async function runReviewWorkflow(
   if (reviewQueuePath) {
     lines.push(`Updated ${reviewQueuePath}`);
   }
+  lines.push(`Saved context pack ${contextPack.artifactPath}`);
+  lines.push(`Updated ${await writeWorkspaceBrief(root)}`);
 
   return { lines };
 }
 
 export async function runAskWorkflow(
   root: string,
-  options: { question: string; format: AskFormat; fileIntoWiki?: boolean }
+  options: { question: string; format: AskFormat; fileIntoWiki?: boolean; budgetChars?: number }
 ): Promise<WorkflowRunResult> {
   const { config, paths } = await initializeProject(root);
   const result = await answerQuestion({
@@ -388,7 +419,8 @@ export async function runAskWorkflow(
     paths,
     question: options.question,
     format: options.format,
-    fileIntoWiki: options.fileIntoWiki
+    fileIntoWiki: options.fileIntoWiki,
+    budgetChars: options.budgetChars
   });
   await appendLogEntry({
     paths,
@@ -410,6 +442,10 @@ export async function runAskWorkflow(
     lines.push(`Created ${result.questionPaths.length} follow-up question note(s):`);
     lines.push(...result.questionPaths.map((relPath) => `- ${relPath}`));
   }
+  if (result.contextPackPath) {
+    lines.push(`Saved context pack ${result.contextPackPath}`);
+  }
+  lines.push(`Updated ${await writeWorkspaceBrief(root)}`);
 
   return { lines };
 }
@@ -423,6 +459,7 @@ export async function runAutoresearchWorkflow(
     rounds?: number;
     maxSubqueries?: number;
     maxResultsPerQuery?: number;
+    budgetChars?: number;
     fileIntoWiki?: boolean;
     progress?: ProgressReporter;
   }
@@ -438,6 +475,7 @@ export async function runAutoresearchWorkflow(
       rounds: options.rounds,
       maxSubqueries: options.maxSubqueries,
       maxResultsPerQuery: options.maxResultsPerQuery,
+      budgetChars: options.budgetChars,
       progress: options.progress
     }
   });
@@ -469,6 +507,9 @@ export async function runAutoresearchWorkflow(
   }
   lines.push(`Subqueries: ${result.plan.subqueries.length}`);
   lines.push(`Evidence groups: ${result.evidence.length}`);
+  if (result.contextPackPath) {
+    lines.push(`Saved context pack ${result.contextPackPath}`);
+  }
   if (filedPath) {
     lines.push(`Filed into ${filedPath}`);
   }
@@ -476,6 +517,7 @@ export async function runAutoresearchWorkflow(
     lines.push(`Created follow-up question notes: ${questionPaths.length}`);
     lines.push(...questionPaths.map((relPath) => `- ${relPath}`));
   }
+  lines.push(`Updated ${await writeWorkspaceBrief(root)}`);
 
   return { lines };
 }
@@ -503,6 +545,7 @@ export async function runHealWorkflow(
   } else if (options?.apply) {
     lines.push("No new additive heal changes were created.");
   }
+  lines.push(`Updated ${await writeWorkspaceBrief(root)}`);
 
   return { lines };
 }
@@ -552,6 +595,7 @@ export async function runEvolveWorkflow(
     lines.push(`Created concept drafts: ${result.createdConcepts.length}`);
     lines.push(...result.createdConcepts.map((relPath) => `- ${relPath}`));
   }
+  lines.push(`Updated ${await writeWorkspaceBrief(root)}`);
 
   return { lines };
 }
@@ -568,8 +612,9 @@ export async function runSearchWorkflow(
 
   const lines: string[] = [];
   for (const result of results) {
-    lines.push(`${result.score.toString().padStart(4, " ")}  ${result.path}`);
+    lines.push(`${result.score.toFixed(2).padStart(6, " ")}  ${result.path}`);
     lines.push(`      ${result.title}`);
+    lines.push(`      ${result.kind} · backlinks ${result.backlinks} · ${result.reasons.slice(0, 2).join(", ")}`);
     lines.push(`      ${result.snippet}`);
   }
   return { lines };

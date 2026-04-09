@@ -1,6 +1,7 @@
 export type ReasoningEffort = "none" | "low" | "medium" | "high" | "xhigh";
 export type WorkflowPhase = "compile" | "ask" | "heal" | "evolve";
 export type CompileDepth = "incremental" | "deep";
+export type SearchPageKind = "system" | "source" | "entity" | "concept" | "question" | "filed" | "other";
 
 export type AskFormat = "answer" | "report" | "slides" | "chart";
 
@@ -79,6 +80,30 @@ export interface SearchResult {
   title: string;
   score: number;
   snippet: string;
+  kind: SearchPageKind;
+  backlinks: number;
+  freshness: number;
+  reasons: string[];
+}
+
+export interface ContextPackSummary {
+  workflow: "ask" | "review" | "autoresearch";
+  createdAt: string;
+  title: string;
+  query: string;
+  budgetChars: number;
+  usedChars: number;
+  includedFileCount: number;
+  prioritizedFileCount: number;
+  retrievedFileCount: number;
+  includedPaths: string[];
+  topResults: Array<{
+    path: string;
+    title: string;
+    score: number;
+    kind: SearchPageKind;
+  }>;
+  artifactPath?: string;
 }
 
 export interface CompileResult {

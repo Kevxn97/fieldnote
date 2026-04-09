@@ -1,4 +1,13 @@
-import { buildDashboardPayload, DashboardActionItem, DashboardActivityItem, DashboardBreakdownItem, DashboardOutputItem, DashboardPayload } from "./dashboard.js";
+import {
+  buildDashboardPayload,
+  DashboardActionItem,
+  DashboardActivityItem,
+  DashboardBreakdownItem,
+  DashboardOutputItem,
+  DashboardPayload,
+  DashboardStatItem,
+  DashboardSystemBrief
+} from "./dashboard.js";
 
 const ANSI = {
   reset: "\u001b[0m",
@@ -39,6 +48,23 @@ export function renderTerminalDashboard(payload: DashboardPayload, options?: Ter
     renderTerminalBox("STATUS", renderStatus(payload.summary, paint), width, paint),
     "",
     renderTerminalBox("COUNTS", renderCounts(payload.summary.counts, innerWidth, paint), width, paint),
+    ...(payload.systemBrief
+      ? [
+          "",
+          renderTerminalBox("SYSTEM BRIEF", renderSystemBrief(payload.systemBrief, innerWidth, paint), width, paint)
+        ]
+      : []),
+    ...(payload.compressionStats && payload.compressionStats.length > 0
+      ? [
+          "",
+          renderTerminalBox(
+            "COMPRESSION / PERFORMANCE",
+            renderCompressionStats(payload.compressionStats, innerWidth, paint),
+            width,
+            paint
+          )
+        ]
+      : []),
     ...(payload.spotlightQuestions.length > 0 ? [
       "",
       renderTerminalBox("OPEN QUESTIONS", renderSpotlight(payload.spotlightQuestions, innerWidth, paint), width, paint),
@@ -106,6 +132,54 @@ function renderBreakdown(items: DashboardBreakdownItem[], innerWidth: number, em
     const valStr = paint.white(String(item.value).padStart(valueWidth));
     return `${paint.gray(padRight(item.label, labelWidth))}  ${bar}  ${valStr}`;
   });
+}
+
+function renderSystemBrief(brief: DashboardSystemBrief, innerWidth: number, paint: TerminalPainter): string[] {
+  const lines: string[] = [];
+  lines.push(`${paint.cyan("▸")} ${paint.bold(brief.title)}`);
+  lines.push(`${paint.dim(brief.path)}`);
+
+  const summaryLines = wrapTerminalLine(brief.summary, innerWidth - 2);
+  for (const line of summaryLines) {
+    lines.push(`  ${paint.gray(line)}`);
+  }
+
+  if (brief.highlights.length > 0) {
+    lines.push("");
+    for (const highlight of brief.highlights.slice(0, 4)) {
+      const wrapped = wrapTerminalLine(highlight, innerWidth - 5);
+      lines.push(`  ${paint.amber("•")} ${wrapped[0]}`);
+      for (let i = 1; i < wrapped.length; i++) {
+        lines.push(`    ${wrapped[i]}`);
+      }
+    }
+  }
+
+  return lines;
+}
+
+function renderCompressionStats(stats: DashboardStatItem[], innerWidth: number, paint: TerminalPainter): string[] {
+  const labelWidth = Math.min(
+    20,
+    Math.max(
+      ...stats.map((stat) => stat.label.length),
+      12
+    )
+  );
+  const lines: string[] = [];
+
+  for (const stat of stats) {
+    const row = `${paint.gray(padRight(stat.label, labelWidth))}  ${paint.bold(paint.white(stat.value))}`;
+    lines.push(...wrapTerminalLine(row, innerWidth));
+    if (stat.detail) {
+      const detailLines = wrapTerminalLine(stat.detail, innerWidth - 2);
+      for (const detailLine of detailLines) {
+        lines.push(`  ${paint.dim(detailLine)}`);
+      }
+    }
+  }
+
+  return lines;
 }
 
 function renderActions(actions: DashboardActionItem[], innerWidth: number, paint: TerminalPainter): string[] {
