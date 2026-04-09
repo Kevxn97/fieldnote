@@ -28,7 +28,11 @@ function buildResult(pathName: string, score: number, title = pathName, snippet 
     path: pathName,
     title,
     score,
-    snippet
+    snippet,
+    kind: "other",
+    backlinks: 0,
+    freshness: 0,
+    reasons: []
   };
 }
 

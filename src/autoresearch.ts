@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { writeContextPack } from "./context-pack.js";
 import { loadPrompt } from "./prompts.js";
 import { buildSourceBundle, collectSourceImageInputs } from "./source.js";
 import { resolveModelForPhase } from "./config.js";
@@ -14,7 +15,7 @@ import {
   truncateText,
   uniqueStrings
 } from "./utils.js";
-import { searchMarkdown } from "./search.js";
+import { buildAskContext, searchMarkdown } from "./search.js";
 
 export type AutoresearchFormat = "report" | "slides" | "chart";
 
@@ -41,6 +42,7 @@ export interface AutoresearchRunOptions {
   rounds?: number;
   maxSubqueries?: number;
   maxResultsPerQuery?: number;
+  budgetChars?: number;
   write?: boolean;
   title?: string;
   imagePaths?: string[];
@@ -52,6 +54,7 @@ export interface AutoresearchRunResult {
   evidence: AutoresearchEvidenceGroup[];
   report: string;
   outputPath?: string;
+  contextPackPath?: string;
 }
 
 export interface SourceReviewOptions extends AutoresearchRunOptions {
@@ -196,10 +199,21 @@ export async function runAutoresearch(args: {
   const rounds = clampNumber(args.options?.rounds ?? 2, 1, 3);
   const maxSubqueries = clampNumber(args.options?.maxSubqueries ?? 5, 3, 6);
   const maxResultsPerQuery = clampNumber(args.options?.maxResultsPerQuery ?? 6, 2, 10);
+  const budgetChars = clampNumber(args.options?.budgetChars ?? Math.min(args.config.compile.maxContextChars, 20_000), 4_000, args.config.compile.maxContextChars);
   const progress = args.options?.progress;
   emitProgress(progress, `starting autoresearch (${format})`);
   emitProgress(progress, "building initial wiki context");
-  const baseContext = await buildSearchContext(args.paths, args.question, args.options?.title);
+  const { context: baseContext, pack } = await buildAskContext(args.paths, args.question, budgetChars);
+  const contextPack = await writeContextPack({
+    paths: args.paths,
+    summary: {
+      workflow: "autoresearch",
+      createdAt: timestamp(),
+      title: args.options?.title ?? `Autoresearch: ${args.question}`,
+      ...pack
+    },
+    context: baseContext
+  });
   const plannerInstructions = await loadPrompt(args.paths, "autoresearch-planner.md");
   const synthesizerInstructions =
     format === "slides"
@@ -295,7 +309,8 @@ export async function runAutoresearch(args: {
     plan,
     evidence: mergedEvidence,
     report,
-    outputPath
+    outputPath,
+    contextPackPath: contextPack.artifactPath
   };
 }
 
@@ -330,20 +345,6 @@ export async function reviewSource(args: {
     ...response,
     report: enriched
   };
-}
-
-async function buildSearchContext(paths: ResolvedPaths, question: string, title?: string): Promise<string> {
-  const results = await searchMarkdown(paths.wikiDir, question, 8);
-  const lines = [
-    `Question: ${question}`,
-    ...(title ? [`Title: ${title}`] : []),
-    "",
-    "Top retrieved wiki pages:",
-    ...(results.length
-      ? results.map((result) => `- ${toWikiLink(result.path)} — ${result.title}`)
-      : ["- No wiki pages matched yet."])
-  ];
-  return lines.join("\n");
 }
 
 async function gatherEvidence(

@@ -10,6 +10,7 @@ Repo-specific instructions for the `llm-knowledge-base` project.
 - `vault/wiki/` stores compiled markdown knowledge pages.
 - `wiki/system/catalog.md` is the persistent content-oriented catalog.
 - `wiki/system/log.md` is the append-only chronological activity log.
+- `wiki/system/brief.md` is the one-page operator brief refreshed by major workflows so humans and agents can re-enter the workspace quickly.
 - `vault/outputs/` stores generated answers, reports, and slide decks.
 - `vault/outputs/reviews/` stores single-source review artifacts.
 - `vault/outputs/research/` stores broader iterative autoresearch runs.
@@ -20,8 +21,10 @@ Repo-specific instructions for the `llm-knowledge-base` project.
 - `kb update` is the preferred one-shot daily inbox workflow for `vault/Clippings/`: import, run the fast incremental sync, then clear imported inbox files.
 - `kb sync` should stay fast and incremental for daily use: changed source pages plus targeted entity/concept refresh only.
 - `kb sync --deep` and `kb compile` are the explicit slower full-graph rebuild paths.
+- `kb watch` is the preferred live operator mode when the inbox is active: watch `vault/Clippings/` and `vault/raw/`, debounce changes, then run the safe fast refresh path.
 - `kb review` is the preferred single-source human-in-the-loop workflow when one source should be inspected against the current wiki before wider synthesis.
 - `kb autoresearch` is the preferred deeper question workflow when simple `kb ask` retrieval is not enough.
+- `kb ask`, `kb review`, and `kb autoresearch` should use budgeted context packs and persist the latest pack under `.kb/context-packs/` so prompt compression stays inspectable.
 - Long-running commands such as `kb autoresearch` and `kb evolve` should emit step-by-step terminal progress so the user can see what is happening live.
 - `kb sync` and `kb update` should also emit visible terminal progress when a run may take longer than a quick source-only refresh.
 - `kb heal --apply` should remain additive and safe: create follow-up questions, draft concept pages, or system notes, but do not delete or silently rewrite source summaries.
@@ -29,6 +32,7 @@ Repo-specific instructions for the `llm-knowledge-base` project.
 - `kb evolve --rounds <n>` is the preferred way to make that loop more aggressive instead of broadening everyday `kb update`.
 - `kb evolve --until-stable` is the preferred way to let maintenance continue until the wiki reaches a quiet round.
 - `.kb/` stores manifests and build metadata.
+- `.kb/context-packs/` stores the latest human-inspectable context-pack artifacts used to ground ask/review/research prompts.
 
 ## Wiki schema
 - Treat the repo like a persistent LLM-maintained wiki, not a one-shot RAG cache.
@@ -42,6 +46,7 @@ Repo-specific instructions for the `llm-knowledge-base` project.
 - Deterministic navigation artifacts live in `vault/wiki/system/`, especially `catalog.md`, `log.md`, and the per-type indexes.
 - `vault/wiki/system/contradictions.md`, `vault/wiki/system/graph-audit.md`, and `vault/wiki/system/revision-queue.md` are durable system pages for deeper evolution passes.
 - `vault/wiki/system/review-queue.md` is the durable backlog for single-source review follow-ups.
+- `vault/wiki/system/brief.md` should stay concise, operator-facing, and deterministic; prefer a compact snapshot, compression signals, recent activity, and recommended next actions over long narrative prose.
 - `kb ask` should compound the wiki: answers go to `vault/outputs/`, and when filed back they should strengthen the wiki rather than disappear into terminal history.
 - `kb ask --format chart` should produce grounded chart briefs, not decorative made-up visuals.
 - If an answer contains strong follow-up questions, promote them into `vault/wiki/questions/`.

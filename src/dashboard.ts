@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { initializeProject, loadBuildState, loadSources, resolveModelForPhase } from "./config.js";
+import { readLatestContextPack } from "./context-pack.js";
 import { BuildState } from "./types.js";
 import { extractFirstHeading, stripFrontmatter, truncateText, walkFiles } from "./utils.js";
 
@@ -34,6 +35,19 @@ export interface DashboardBreakdownItem {
   value: number;
 }
 
+export interface DashboardSystemBrief {
+  title: string;
+  path: string;
+  summary: string;
+  highlights: string[];
+}
+
+export interface DashboardStatItem {
+  label: string;
+  value: string;
+  detail?: string;
+}
+
 export interface DashboardActionItem {
   title: string;
   detail: string;
@@ -55,6 +69,8 @@ export interface DashboardPayload {
   sourceBreakdown: DashboardBreakdownItem[];
   outputBreakdown: DashboardBreakdownItem[];
   spotlightQuestions: string[];
+  systemBrief?: DashboardSystemBrief | null;
+  compressionStats?: DashboardStatItem[];
 }
 
 export function extractOpenQuestionsFromMarkdown(markdown: string): string[] {
@@ -100,29 +116,40 @@ export function inferHealthLabel(args: { rawCount: number; wikiCount: number; la
 }
 
 export async function buildDashboardPayload(root: string): Promise<DashboardPayload> {
-  const [{ config, paths }, buildState, sources] = await Promise.all([
-    initializeProject(root),
-    initializeProject(root).then(({ paths }) => loadBuildState(paths)),
-    initializeProject(root).then(({ paths }) => loadSources(paths))
-  ]);
+  const { config, paths } = await initializeProject(root);
+  const [buildState, sources] = await Promise.all([loadBuildState(paths), loadSources(paths)]);
 
-  const [wikiFiles, outputFiles, latestHealthMarkdown] = await Promise.all([
+  const [wikiFiles, outputFiles, latestHealthMarkdown, latestContextPack] = await Promise.all([
     listMarkdownFiles(paths.wikiDir),
     listMarkdownFiles(paths.outputDir),
-    readLatestHealthMarkdown(paths.outputDir)
+    readLatestHealthMarkdown(paths.outputDir),
+    readLatestContextPack(paths)
   ]);
 
-  const [recentOutputs, questionCount, recentActivity, spotlightQuestions] = await Promise.all([
+  const [recentOutputs, questionCount, recentActivity, spotlightQuestions, systemBrief, rawBytes, wikiBytes] = await Promise.all([
     collectRecentOutputs(paths.vaultDir, paths.outputDir, 6),
     countOpenQuestions(wikiFiles),
     collectRecentActivity(paths.wikiDir, 6),
-    collectSpotlightQuestions(wikiFiles, 3)
+    collectSpotlightQuestions(wikiFiles, 3),
+    readSystemBriefMarkdown(paths.root, paths.wikiDir),
+    sumSourceStorageBytes(paths.vaultDir, sources),
+    sumFileSizes(wikiFiles)
   ]);
 
   const pendingCompile = sources.filter(
     (s) => buildState.compiledSources[s.id]?.checksum !== s.checksum
   ).length;
   const pageCounts = countWikiPageKinds(wikiFiles);
+  const compressionStats = buildCompressionStats({
+    rawCount: sources.length,
+    sourceBytes: rawBytes,
+    wikiCount: wikiFiles.length,
+    wikiBytes,
+    pendingCompile,
+    maxSourceChars: config.compile.maxSourceChars,
+    maxContextChars: config.compile.maxContextChars,
+    latestContextPack
+  });
 
   const health = inferHealthLabel({
     rawCount: sources.length,
@@ -171,6 +198,8 @@ export async function buildDashboardPayload(root: string): Promise<DashboardPayl
     sourceBreakdown: buildSourceBreakdown(sources),
     outputBreakdown: buildOutputBreakdown(paths.outputDir, outputFiles),
     spotlightQuestions,
+    systemBrief,
+    compressionStats,
   };
 }
 
@@ -274,6 +303,32 @@ async function readLatestHealthMarkdown(outputDir: string): Promise<string | nul
   return fs.readFile(latest.file, "utf8");
 }
 
+async function readSystemBriefMarkdown(root: string, wikiDir: string): Promise<DashboardSystemBrief | null> {
+  const briefPath = path.join(wikiDir, "system", "brief.md");
+  try {
+    const markdown = stripFrontmatter(await fs.readFile(briefPath, "utf8"));
+    const lines = markdown
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .filter((line) => !line.startsWith("#"));
+
+    const highlights = lines
+      .filter((line) => /^-\s+/.test(line))
+      .map((line) => line.replace(/^-+\s+/, ""))
+      .slice(0, 4);
+
+    return {
+      title: extractFirstHeading(markdown),
+      path: path.relative(root, briefPath).replace(/\\/g, "/"),
+      summary: firstMeaningfulParagraph(markdown),
+      highlights
+    };
+  } catch {
+    return null;
+  }
+}
+
 function firstMeaningfulParagraph(markdown: string): string {
   const lines = stripFrontmatter(markdown)
     .split("\n")
@@ -316,6 +371,86 @@ function buildOutputBreakdown(outputDir: string, outputFiles: string[]): Dashboa
   return [...counts.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([label, value]) => ({ label: label.replace(/-/g, " "), value }));
+}
+
+function buildCompressionStats(args: {
+  rawCount: number;
+  sourceBytes: number;
+  wikiCount: number;
+  wikiBytes: number;
+  pendingCompile: number;
+  maxSourceChars: number;
+  maxContextChars: number;
+  latestContextPack: Awaited<ReturnType<typeof readLatestContextPack>>;
+}): DashboardStatItem[] {
+  const stats: DashboardStatItem[] = [
+    {
+      label: "Raw corpus",
+      value: `${formatByteSize(args.sourceBytes)} across ${args.rawCount} source${args.rawCount === 1 ? "" : "s"}`
+    },
+    {
+      label: "Wiki layer",
+      value: `${formatByteSize(args.wikiBytes)} across ${args.wikiCount} page${args.wikiCount === 1 ? "" : "s"}`
+    },
+    {
+      label: "Source cap",
+      value: `${args.maxSourceChars.toLocaleString("en-US")} chars`
+    },
+    {
+      label: "Context cap",
+      value: `${args.maxContextChars.toLocaleString("en-US")} chars`
+    },
+    {
+      label: "Pending rebuild",
+      value: `${args.pendingCompile} source${args.pendingCompile === 1 ? "" : "s"}`
+    }
+  ];
+
+  if (args.latestContextPack) {
+    stats.splice(2, 0, {
+      label: "Latest prompt pack",
+      value: `${args.latestContextPack.usedChars.toLocaleString("en-US")} / ${args.latestContextPack.budgetChars.toLocaleString("en-US")} chars`,
+      detail: `${args.latestContextPack.workflow} · ${args.latestContextPack.includedFileCount} files · ${args.latestContextPack.query}`
+    });
+  }
+
+  return stats;
+}
+
+async function sumSourceStorageBytes(vaultDir: string, sources: Awaited<ReturnType<typeof loadSources>>): Promise<number> {
+  const targets = uniquePaths(
+    sources.flatMap((source) => [source.storedPath, ...(source.relatedAssets ?? [])])
+      .map((relPath) => path.join(vaultDir, relPath))
+  );
+  return sumFileSizes(targets);
+}
+
+async function sumFileSizes(files: string[]): Promise<number> {
+  const sizes = await Promise.all(
+    files.map(async (file) => {
+      try {
+        const stat = await fs.stat(file);
+        return stat.size;
+      } catch {
+        return 0;
+      }
+    })
+  );
+  return sizes.reduce((total, size) => total + size, 0);
+}
+
+function uniquePaths(values: string[]): string[] {
+  return [...new Set(values)];
+}
+
+function formatByteSize(bytes: number): string {
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 function inferWorkspaceStage(args: { rawCount: number; wikiCount: number; outputCount: number }): string {

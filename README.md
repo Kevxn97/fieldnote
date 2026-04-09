@@ -73,9 +73,16 @@ The deeper maintenance path is explicit:
 
 - `kb sync --deep`
 - `kb compile`
+- `kb watch`
 - `kb evolve`
 
 That way daily use stays reasonably fast, while the heavier graph cleanup and cross-page revision work stays opt-in.
+
+Prompt context is also intentionally compressed:
+
+- `kb ask`, `kb review`, and `kb autoresearch` use a budgeted context pack instead of dumping the full wiki into the prompt
+- the latest context pack is written into `.kb/context-packs/`
+- the dashboard surfaces raw/wiki/prompt compression signals so the retrieval budget is visible
 
 ## What it can do
 
@@ -92,6 +99,8 @@ That way daily use stays reasonably fast, while the heavier graph cleanup and cr
 - review a single source against the current knowledge base
 - run a deeper iterative research workflow when simple retrieval is not enough
 - run health audits and broader maintenance passes over the wiki
+- keep a one-page `vault/wiki/system/brief.md` refreshed so humans and agents can re-enter the workspace quickly
+- watch the inbox and raw layer with `kb watch` for a live operator loop
 - file strong outputs back into the wiki so they compound
 
 ## Three core workflows
@@ -122,10 +131,13 @@ Use this when you want reusable answers, reports, slide drafts, or chart briefs 
 kb ask "Summarize the strongest product themes" --format report
 kb ask "Turn this into a slide draft" --format slides
 kb ask "Make this chart-ready" --format chart
+kb ask "What changed this week?" --format report --budget 16000
 kb ask "What changed this week?" --format report --file-into-wiki
 kb review
+kb review some-source-slug --budget 18000
 kb review some-source-slug --apply
 kb autoresearch "What contradictions are emerging?" --format report
+kb autoresearch "What contradictions are emerging?" --format report --budget 20000
 ```
 
 ### 3. Maintain and improve the graph
@@ -135,6 +147,7 @@ Use this when the vault has grown enough that you want a slower, deeper pass acr
 ```bash
 kb sync --deep
 kb compile
+kb watch
 kb heal
 kb heal --apply
 kb evolve
@@ -171,10 +184,12 @@ It is not meant to be a second note editor.
 Beyond the three main workflows, Fieldnote also gives you:
 
 - deterministic navigation artifacts such as `catalog.md`, indexes, and the append-only activity log
+- a refreshed `brief.md` system page that summarizes the current workspace state, compression signals, and next actions
 - review queues, contradiction tracking, and revision planning pages under `vault/wiki/system/`
 - the ability to file strong generated outputs back into the wiki
 - Obsidian setup helpers for templates and snippets
 - local clip attachment carry-over into `vault/raw/images/`
+- visible context-pack artifacts under `.kb/context-packs/`
 - a more experimental iterative research mode (`kb autoresearch`) for broader synthesis passes
 
 ## Quickstart
@@ -245,6 +260,7 @@ vault/
 .kb/
   sources.json
   build-state.json
+  context-packs/
 ```
 
 ## Architecture notes
@@ -254,6 +270,7 @@ vault/
 - `src/cli-workflows.ts` is the shared action layer used by both commands and the interactive hub
 - `src/dashboard-hub.ts` implements the interactive CLI command hub
 - `src/terminal-dashboard.ts` renders the terminal dashboard view
+- `src/watch-mode.ts` owns the long-running `kb watch` loop
 - there is no web dashboard anymore; Obsidian is the main UI and the terminal hub is the control plane
 - the legacy Python implementation has been removed so the public repo stays aligned with the current TypeScript product path
 

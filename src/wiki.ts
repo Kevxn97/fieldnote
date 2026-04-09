@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { loadBuildState, loadSources, resolveModelForPhase, saveBuildState } from "./config.js";
+import { writeContextPack } from "./context-pack.js";
 import { refreshNavigationArtifacts } from "./navigation.js";
 import { createOpenAIClient, requireOpenAIConfigured, runTextResponse } from "./openai.js";
 import {
@@ -36,8 +37,12 @@ import {
   toWikiLink,
   uniqueStrings,
   upsertManagedSection,
-  walkFiles
+  walkFiles,
+  mapWithConcurrency
 } from "./utils.js";
+
+const SOURCE_COMPILE_CONCURRENCY = 2;
+const KNOWLEDGE_PAGE_CONCURRENCY = 2;
 
 export async function compileKnowledgeBase(
   config: KBConfig,
@@ -60,10 +65,8 @@ export async function compileKnowledgeBase(
     emitCompileProgress(progress, depth === "deep" ? "no changed sources; refreshing graph + navigation" : "no changed sources; refreshing navigation");
   }
 
-  let sourceIndex = 0;
-  for (const source of changed) {
-    sourceIndex += 1;
-    emitCompileProgress(progress, `source ${sourceIndex}/${changed.length}: ${source.title}`);
+  const compiledSources = await mapWithConcurrency(changed, SOURCE_COMPILE_CONCURRENCY, async (source, index) => {
+    emitCompileProgress(progress, `source ${index + 1}/${changed.length}: ${source.title}`);
     const bundle = await buildSourceBundle(source, config, paths);
     const imagePaths = await collectSourceImageInputs(source, paths);
     const instructions = await sourceSummarizerInstructions(paths, source);
@@ -75,12 +78,21 @@ export async function compileKnowledgeBase(
       imagePaths
     });
     const pagePath = await writeSourcePage(paths, source, generated);
-    buildState.compiledSources[source.id] = {
+    return {
+      sourceId: source.id,
       checksum: source.checksum,
       pagePath,
       compiledAt: timestamp()
     };
-    sourcePages.push(pagePath);
+  });
+
+  for (const compiled of compiledSources) {
+    buildState.compiledSources[compiled.sourceId] = {
+      checksum: compiled.checksum,
+      pagePath: compiled.pagePath,
+      compiledAt: compiled.compiledAt
+    };
+    sourcePages.push(compiled.pagePath);
   }
 
   emitCompileProgress(progress, "collecting source graph");
@@ -138,10 +150,11 @@ export async function answerQuestion(args: {
   question: string;
   format: AskFormat;
   fileIntoWiki?: boolean;
-}): Promise<{ outputPath: string; filedPath?: string; questionPaths: string[]; validationWarnings: string[] }> {
+  budgetChars?: number;
+}): Promise<{ outputPath: string; filedPath?: string; questionPaths: string[]; validationWarnings: string[]; contextPackPath?: string }> {
   requireOpenAIConfigured();
   const { config, paths, question, format, fileIntoWiki } = args;
-  const { context, results } = await buildAskContext(paths, question, config.compile.maxContextChars);
+  const { context, results, pack } = await buildAskContext(paths, question, args.budgetChars ?? config.compile.maxContextChars);
   if (!context.trim()) {
     throw new Error("No wiki context found. Run `kb compile` first.");
   }
@@ -169,6 +182,16 @@ export async function answerQuestion(args: {
     input,
     reasoningEffort: config.openai.reasoning.ask
   });
+  const contextPack = await writeContextPack({
+    paths,
+    summary: {
+      workflow: "ask",
+      createdAt: timestamp(),
+      title: question,
+      ...pack
+    },
+    context
+  });
 
   const validationWarnings = format === "chart" ? validateChartMarkdown(output).errors : [];
   const outputPath = await writeAnswerFile(paths, question, format, output, results.map((result) => result.path), validationWarnings);
@@ -187,7 +210,7 @@ export async function answerQuestion(args: {
     await refreshNavigationArtifacts(paths);
   }
 
-  return { outputPath, filedPath, questionPaths, validationWarnings };
+  return { outputPath, filedPath, questionPaths, validationWarnings, contextPackPath: contextPack.artifactPath };
 }
 
 export async function evolveKnowledgeBase(
@@ -692,24 +715,35 @@ async function writeSourcePage(paths: ResolvedPaths, source: SourceRecord, markd
 }
 
 async function collectSourcePages(paths: ResolvedPaths, sources: SourceRecord[]): Promise<Map<string, SourcePageEntry>> {
-  const map = new Map<string, SourcePageEntry>();
+  const entries = await Promise.all(
+    sources.map(async (source) => {
+      const relPath = path.join("wiki", "sources", `${source.slug}.md`).replace(/\\/g, "/");
+      const absolute = path.join(paths.vaultDir, relPath);
+      try {
+        const markdown = await fs.readFile(absolute, "utf8");
+        return {
+          sourceId: source.id,
+          entry: {
+            source,
+            pagePath: relPath,
+            title: extractFirstHeading(markdown),
+            markdown,
+            entities: extractEntities(markdown),
+            concepts: extractConcepts(markdown)
+          } satisfies SourcePageEntry
+        };
+      } catch {
+        return null;
+      }
+    })
+  );
 
-  for (const source of sources) {
-    const relPath = path.join("wiki", "sources", `${source.slug}.md`).replace(/\\/g, "/");
-    const absolute = path.join(paths.vaultDir, relPath);
-    try {
-      const markdown = await fs.readFile(absolute, "utf8");
-      map.set(source.id, {
-        source,
-        pagePath: relPath,
-        title: extractFirstHeading(markdown),
-        markdown,
-        entities: extractEntities(markdown),
-        concepts: extractConcepts(markdown)
-      });
-    } catch {
+  const map = new Map<string, SourcePageEntry>();
+  for (const item of entries) {
+    if (!item) {
       continue;
     }
+    map.set(item.sourceId, item.entry);
   }
 
   return map;
@@ -758,17 +792,13 @@ async function synthesizeEntityPages(
   buildState: Awaited<ReturnType<typeof loadBuildState>>,
   options?: { targets?: string[]; progress?: (message: string) => void }
 ): Promise<string[]> {
-  const outputs: string[] = [];
   const targets = options?.targets ?? [...entityMap.keys()];
-  let index = 0;
-
-  for (const entity of targets) {
+  const compiled = await mapWithConcurrency(targets, KNOWLEDGE_PAGE_CONCURRENCY, async (entity, index) => {
     const entries = entityMap.get(entity);
     if (!entries || entries.length === 0) {
-      continue;
+      return null;
     }
-    index += 1;
-    emitCompileProgress(options?.progress, `entity ${index}/${targets.length}: ${entity}`);
+    emitCompileProgress(options?.progress, `entity ${index + 1}/${targets.length}: ${entity}`);
     const slug = slugifyValue(entity);
     const relPath = path.join("wiki", "entities", `${slug}.md`).replace(/\\/g, "/");
     const absolute = path.join(paths.vaultDir, relPath);
@@ -793,11 +823,23 @@ async function synthesizeEntityPages(
       tags: ["entity"]
     });
     await fs.writeFile(absolute, `${frontmatter}${generated.trim()}\n`, "utf8");
-    buildState.entityPages[entity] = {
-      pagePath: relPath,
+    return {
+      entity,
+      relPath,
       compiledAt: timestamp()
     };
-    outputs.push(relPath);
+  });
+
+  const outputs: string[] = [];
+  for (const item of compiled) {
+    if (!item) {
+      continue;
+    }
+    buildState.entityPages[item.entity] = {
+      pagePath: item.relPath,
+      compiledAt: item.compiledAt
+    };
+    outputs.push(item.relPath);
   }
 
   return outputs;
@@ -810,17 +852,13 @@ async function synthesizeConceptPages(
   buildState: Awaited<ReturnType<typeof loadBuildState>>,
   options?: { targets?: string[]; progress?: (message: string) => void }
 ): Promise<string[]> {
-  const outputs: string[] = [];
   const targets = options?.targets ?? [...conceptMap.keys()];
-  let index = 0;
-
-  for (const concept of targets) {
+  const compiled = await mapWithConcurrency(targets, KNOWLEDGE_PAGE_CONCURRENCY, async (concept, index) => {
     const entries = conceptMap.get(concept);
     if (!entries || entries.length === 0) {
-      continue;
+      return null;
     }
-    index += 1;
-    emitCompileProgress(options?.progress, `concept ${index}/${targets.length}: ${concept}`);
+    emitCompileProgress(options?.progress, `concept ${index + 1}/${targets.length}: ${concept}`);
     const slug = slugifyValue(concept);
     const relPath = path.join("wiki", "concepts", `${slug}.md`).replace(/\\/g, "/");
     const absolute = path.join(paths.vaultDir, relPath);
@@ -845,11 +883,23 @@ async function synthesizeConceptPages(
       tags: ["concept"]
     });
     await fs.writeFile(absolute, `${frontmatter}${generated.trim()}\n`, "utf8");
-    buildState.conceptPages[concept] = {
-      pagePath: relPath,
+    return {
+      concept,
+      relPath,
       compiledAt: timestamp()
     };
-    outputs.push(relPath);
+  });
+
+  const outputs: string[] = [];
+  for (const item of compiled) {
+    if (!item) {
+      continue;
+    }
+    buildState.conceptPages[item.concept] = {
+      pagePath: item.relPath,
+      compiledAt: item.compiledAt
+    };
+    outputs.push(item.relPath);
   }
 
   return outputs;

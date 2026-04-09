@@ -9,6 +9,8 @@ import {
   resolveHubOpenTarget,
   resolveHubOutputSelection
 } from "../src/dashboard-hub.js";
+import { resolvePaths } from "../src/config.js";
+import { classifyWatchRefreshMode } from "../src/watch-mode.js";
 
 test("parseHubCommand recognizes slash and plain command forms", () => {
   const sync = parseHubCommand("/sync");
@@ -70,7 +72,18 @@ test("renderDashboardHubScreen stays ansi-free when color is disabled", () => {
       ],
       sourceBreakdown: [{ label: "text", value: 5 }],
       outputBreakdown: [{ label: "answers", value: 3 }],
-      spotlightQuestions: ["What are the key trade-offs in local-first architectures?"]
+      spotlightQuestions: ["What are the key trade-offs in local-first architectures?"],
+      systemBrief: {
+        title: "System Brief",
+        path: "vault/wiki/system/brief.md",
+        summary: "A compact guide to the workspace state.",
+        highlights: ["Compression should stay visible.", "Static output must remain readable."]
+      },
+      compressionStats: [
+        { label: "Source cap", value: "30,000 chars" },
+        { label: "Context cap", value: "45,000 chars" },
+        { label: "Workspace compression", value: "5 raw -> 12 wiki files" }
+      ]
     },
     {
       lastRunTitle: "ASK",
@@ -88,6 +101,8 @@ test("renderDashboardHubScreen stays ansi-free when color is disabled", () => {
   assert.doesNotMatch(output, /\u001b\[/);
   assert.match(output, /╭─ STATUS/);
   assert.match(output, /◆ Weekly brief/);
+  assert.match(output, /SYSTEM BRIEF/);
+  assert.match(output, /COMPRESSION \/ PERFORMANCE/);
   for (const line of output.split("\n")) {
     assert.ok(line.length <= 84, `line exceeds width: ${line}`);
   }
@@ -175,5 +190,25 @@ test("resolveHubOpenTarget rejects missing built-in targets", async () => {
   await assert.rejects(
     resolveHubOpenTarget({ root, payload, raw: "catalog" }),
     /Could not resolve/
+  );
+});
+
+test("classifyWatchRefreshMode prefers update for clippings changes and sync for raw changes", () => {
+  const paths = resolvePaths("/tmp/fieldnote-watch-test");
+
+  assert.equal(
+    classifyWatchRefreshMode([path.join(paths.rawDir, "files", "note.md")], paths),
+    "sync"
+  );
+  assert.equal(
+    classifyWatchRefreshMode([path.join(paths.clippingsDir, "clip.md")], paths),
+    "update"
+  );
+  assert.equal(
+    classifyWatchRefreshMode([
+      path.join(paths.rawDir, "files", "note.md"),
+      path.join(paths.clippingsDir, "clip.md")
+    ], paths),
+    "update"
   );
 });
