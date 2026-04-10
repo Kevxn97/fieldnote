@@ -15,7 +15,16 @@ import {
   listImportableClippingFiles,
 } from "./source.js";
 import { AskFormat, ResolvedPaths, SourceRecord } from "./types.js";
-import { uniqueStrings, walkFiles } from "./utils.js";
+import {
+  extractFirstHeading,
+  stripFirstHeading,
+  stripFrontmatter,
+  toObsidianOpenUri,
+  toWikiLink,
+  truncateText,
+  uniqueStrings,
+  walkFiles
+} from "./utils.js";
 import {
   answerQuestion,
   compileKnowledgeBase,
@@ -26,7 +35,19 @@ import {
 
 export interface WorkflowRunResult {
   lines: string[];
+  hubLines?: string[];
   watchPaths?: string[];
+}
+
+export interface AskWorkflowSummaryArgs {
+  question: string;
+  format: AskFormat;
+  outputPath: string;
+  outputMarkdown: string;
+  vaultName: string;
+  filedPath?: string;
+  questionPaths?: string[];
+  validationWarnings?: string[];
 }
 
 export type ProgressReporter = (message: string) => void;
@@ -447,7 +468,47 @@ export async function runAskWorkflow(
   }
   lines.push(`Updated ${await writeWorkspaceBrief(root)}`);
 
-  return { lines };
+  const outputMarkdown = await fs.readFile(path.join(paths.vaultDir, result.outputPath), "utf8");
+  const hubLines = buildAskWorkflowSummaryLines({
+    question: options.question,
+    format: options.format,
+    outputPath: result.outputPath,
+    outputMarkdown,
+    vaultName: path.basename(paths.vaultDir),
+    filedPath: result.filedPath,
+    questionPaths: result.questionPaths,
+    validationWarnings: result.validationWarnings
+  });
+
+  return { lines, hubLines };
+}
+
+export function buildAskWorkflowSummaryLines(args: AskWorkflowSummaryArgs): string[] {
+  const outputLink = toWikiLink(args.outputPath);
+  const obsidianUri = toObsidianOpenUri(args.vaultName, args.outputPath);
+  const title = extractFirstHeading(stripFrontmatter(args.outputMarkdown));
+  const previewLines = buildMarkdownPreviewLines(args.outputMarkdown, args.format);
+  const lines = [
+    `Generated ${args.format}: ${title}`,
+    `Question: ${truncateText(args.question, 120).replace(/\s+/g, " ").trim()}`,
+    `Vault page: ${outputLink}`,
+    `Obsidian: ${obsidianUri}`
+  ];
+
+  if (args.filedPath) {
+    lines.push(`Filed page: ${toWikiLink(args.filedPath)}`);
+  }
+  if (args.questionPaths && args.questionPaths.length > 0) {
+    lines.push(`Follow-up questions: ${args.questionPaths.map((item) => toWikiLink(item)).join(", ")}`);
+  }
+  if (args.validationWarnings && args.validationWarnings.length > 0) {
+    lines.push(`Validation: ${args.validationWarnings.join(" | ")}`);
+  }
+
+  lines.push("");
+  lines.push("Preview:");
+  lines.push(...previewLines);
+  return lines;
 }
 
 export async function runAutoresearchWorkflow(
@@ -756,6 +817,21 @@ function buildAmbiguousSourceError(selector: string, matches: SourceRecord[]): s
     .map((source) => `- ${source.title} (${source.storedPath})`)
     .join("\n");
   return `Source selector "${selector}" matched multiple sources:\n${preview}`;
+}
+
+function buildMarkdownPreviewLines(markdown: string, format: AskFormat = "answer", maxLines = 5): string[] {
+  const body = stripFrontmatter(markdown);
+  const withoutHeading = stripFirstHeading(body) || body;
+  const preview = withoutHeading
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => line !== "---")
+    .filter((line) => !(format === "slides" && /^theme:\s+/i.test(line)))
+    .slice(0, maxLines)
+    .map((line) => truncateText(line.replace(/\s+/g, " "), 140));
+
+  return preview.length > 0 ? preview : ["Generated output written to the vault."];
 }
 
 function formatCompileLines(

@@ -1,7 +1,7 @@
 ---
 kind: "index"
 title: "Workspace Brief"
-updated_at: "2026-04-10T19:24:24.301Z"
+updated_at: "2026-04-10T19:41:22.572Z"
 tags:
   - "index"
   - "brief"
@@ -20,11 +20,16 @@ The workspace is producing artifacts. A review pass will tighten coverage and pr
 - Source pages: 5
 - Entities: 37
 - Concepts: 40
-- Outputs: 1
-- Open questions: 427
+- Outputs: 2
+- Open questions: 430
 
 ## Compression
-- No context pack captured yet. Run `kb ask`, `kb review`, or `kb autoresearch`.
+- Latest workflow: ask
+- Latest query: was sind managed agents in claude ?
+- Context budget: 45000 chars
+- Context used: 44863 chars
+- Included files: 9
+- Context pack: .kb/context-packs/2026-04-10T19-41-22-548Z-was-sind-managed-agents-in-claude-ask.md
 
 ## Recommended Next Actions
 - Refresh the inbox
@@ -43,7 +48,7 @@ The workspace is producing artifacts. A review pass will tighten coverage and pr
 - When should teams prefer Model Context Protocol over custom tool integrations?
 
 ## Recent Activity
+- 2026-04-10 19:41 · ask · was sind managed agents in claude ? — Generated a answer answer.
 - 2026-04-10 19:24 · sync · Vault sync — Synced 1 changed source(s) with a targeted graph refresh.
 - 2026-04-10 19:22 · ingest · What is Claude Managed Agents? — Added latest source into raw/clips/what-is-claude-managed-agents.md.
 - 2026-04-05 20:57 · ask · explain multi-agent-systems — Generated a answer answer.
-- 2026-04-05 19:57 · ask · wie baut man mutli-agent-systeme — Generated a answer answer.

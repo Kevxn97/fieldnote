@@ -454,7 +454,7 @@ class DashboardHub {
     });
 
     await this.refreshPayload();
-    this.setLastRun(title, result.lines);
+    this.setLastRun(title, result.hubLines ?? result.lines);
   }
 
   private showOutputs(): void {

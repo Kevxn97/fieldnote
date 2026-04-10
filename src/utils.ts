@@ -39,6 +39,12 @@ export function toWikiLink(filePath: string): string {
   return `[[${normalized}]]`;
 }
 
+export function toObsidianOpenUri(vaultName: string, filePath: string): string {
+  const normalizedVault = vaultName.trim() || "vault";
+  const normalizedFile = filePath.replace(/\\/g, "/");
+  return `obsidian://open?vault=${encodeURIComponent(normalizedVault)}&file=${encodeURIComponent(normalizedFile)}`;
+}
+
 export function truncateText(input: string, maxChars: number): string {
   if (input.length <= maxChars) {
     return input;

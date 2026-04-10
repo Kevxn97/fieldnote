@@ -47,3 +47,8 @@ Append-only operational history for ingests, syncs, queries, and health passes.
   - [[wiki/concepts/agent-sessions]]
   - [[wiki/concepts/sandbox-environments]]
   - [[wiki/concepts/isolated-containers]]
+
+## [2026-04-10 19:41] ask | was sind managed agents in claude ?
+- Summary: Generated a answer answer.
+- Files:
+  - [[outputs/answers/2026-04-10-answer-was-sind-managed-agents-in-claude]]

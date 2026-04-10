@@ -182,6 +182,8 @@ The interactive hub is intentionally small and operational. It is there to show 
 
 It is not meant to be a second note editor.
 
+After `/ask`, the hub now shows a short preview of the generated answer directly in the dashboard, alongside the vault note reference and an Obsidian `obsidian://open` link for jumping straight to the saved page.
+
 ## Broader capabilities
 
 Beyond the three main workflows, Fieldnote also gives you:

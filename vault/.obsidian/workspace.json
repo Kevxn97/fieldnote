@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Home.md",
+                "file": "outputs/answers/2026-04-05-answer-explain-multi-agent-systems.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Home"
+              "title": "2026-04-05-answer-explain-multi-agent-systems"
             }
           }
         ]
@@ -181,10 +181,14 @@
       "markdown-importer:Markdown Importprogramm öffnen": false
     }
   },
-  "active": "6e5ce113f7a4732c",
+  "active": "fe1473592fe8e5d8",
   "lastOpenFiles": [
-    "Clippings/What is Claude Managed Agents?.md",
+    "outputs/answers/2026-04-10-answer-was-sind-managed-agents-in-claude.md",
+    "wiki/entities/agents-sdk.md",
     "wiki/system/brief.md",
+    "wiki/concepts/agentic-systems.md",
+    "Home.md",
+    "Clippings/What is Claude Managed Agents?.md",
     "wiki/concepts/event-streaming.md",
     "wiki/concepts/multi-agent-coordination.md",
     "wiki/concepts/parallel-task-execution.md",
@@ -205,10 +209,6 @@
     "raw/clips/what-is-claude-managed-agents.md",
     "wiki/concepts/local-first-saving.md",
     "wiki/concepts/evaluator-optimizer.md",
-    "wiki/concepts/agentic-systems.md",
-    "outputs/answers/2026-04-05-answer-wie-baut-man-mutli-agent-systeme.md",
-    "wiki/entities/andrej-karpathy.md",
-    "wiki/entities/agents-sdk.md",
     "Unbenannt.canvas",
     "raw/clips/memgpt-towards-llms-as-operating-systems.pdf",
     "Clippings/MemGPT- Towards LLMs as Operating Systems.pdf",

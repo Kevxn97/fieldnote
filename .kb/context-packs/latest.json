@@ -1,0 +1,73 @@
+{
+  "workflow": "ask",
+  "createdAt": "2026-04-10T19:41:22.548Z",
+  "title": "was sind managed agents in claude ?",
+  "query": "was sind managed agents in claude ?",
+  "budgetChars": 45000,
+  "usedChars": 44863,
+  "includedFileCount": 9,
+  "prioritizedFileCount": 8,
+  "retrievedFileCount": 1,
+  "includedPaths": [
+    "wiki/index.md",
+    "wiki/system/brief.md",
+    "wiki/system/catalog.md",
+    "wiki/system/log.md",
+    "wiki/system/source-index.md",
+    "wiki/system/entity-index.md",
+    "wiki/system/concept-index.md",
+    "wiki/system/question-index.md",
+    "wiki/entities/claude-managed-agents.md"
+  ],
+  "topResults": [
+    {
+      "path": "wiki/sources/what-is-claude-managed-agents.md",
+      "title": "What is Claude Managed Agents?",
+      "score": 68.5,
+      "kind": "source"
+    },
+    {
+      "path": "wiki/entities/claude-managed-agents.md",
+      "title": "Claude Managed Agents",
+      "score": 68.5,
+      "kind": "entity"
+    },
+    {
+      "path": "wiki/entities/claude.md",
+      "title": "Claude",
+      "score": 49.5,
+      "kind": "entity"
+    },
+    {
+      "path": "wiki/system/entity-index.md",
+      "title": "Entity Index",
+      "score": 47.25,
+      "kind": "system"
+    },
+    {
+      "path": "wiki/sources/building-effective-ai-agents.md",
+      "title": "Building Effective AI Agents",
+      "score": 45.5,
+      "kind": "source"
+    },
+    {
+      "path": "wiki/sources/a-practical-guide-to-building-agents.md",
+      "title": "A practical guide to building agents",
+      "score": 41.5,
+      "kind": "source"
+    },
+    {
+      "path": "wiki/system/concept-index.md",
+      "title": "Concept Index",
+      "score": 41.25,
+      "kind": "system"
+    },
+    {
+      "path": "wiki/entities/claude-agent-sdk.md",
+      "title": "Claude Agent SDK",
+      "score": 39.5,
+      "kind": "entity"
+    }
+  ],
+  "artifactPath": ".kb/context-packs/2026-04-10T19-41-22-548Z-was-sind-managed-agents-in-claude-ask.md"
+}

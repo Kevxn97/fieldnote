@@ -9,6 +9,7 @@ import {
   resolveHubOpenTarget,
   resolveHubOutputSelection
 } from "../src/dashboard-hub.js";
+import { buildAskWorkflowSummaryLines } from "../src/cli-workflows.js";
 import { resolvePaths } from "../src/config.js";
 import { classifyWatchRefreshMode } from "../src/watch-mode.js";
 
@@ -25,6 +26,71 @@ test("parseHubCommand recognizes slash and plain command forms", () => {
   assert.equal(quickAsk.name, "ask");
   assert.equal(quickAsk.isQuickQuestion, true);
   assert.equal(quickAsk.tail, "What changed this week?");
+});
+
+test("buildAskWorkflowSummaryLines surfaces preview and vault references", () => {
+  const lines = buildAskWorkflowSummaryLines({
+    question: "What changed this week in the workspace?",
+    format: "report",
+    outputPath: "outputs/answers/weekly-brief.md",
+    outputMarkdown: [
+      "---",
+      'kind: "output"',
+      "---",
+      "",
+      "# Weekly Brief",
+      "",
+      "The workspace now has clearer output visibility in the dashboard.",
+      "",
+      "## Highlights",
+      "- The answer preview is shown directly after /ask.",
+      "- Obsidian gets a direct open link."
+    ].join("\n"),
+    vaultName: "vault",
+    filedPath: "wiki/filed/2026-04-10-weekly-brief.md",
+    questionPaths: ["wiki/questions/dashboard-preview.md"]
+  });
+
+  assert.deepEqual(lines.slice(0, 4), [
+    "Generated report: Weekly Brief",
+    "Question: What changed this week in the workspace?",
+    "Vault page: [[outputs/answers/weekly-brief]]",
+    "Obsidian: obsidian://open?vault=vault&file=outputs%2Fanswers%2Fweekly-brief.md"
+  ]);
+  assert.ok(lines.includes("Filed page: [[wiki/filed/2026-04-10-weekly-brief]]"));
+  assert.ok(lines.includes("Follow-up questions: [[wiki/questions/dashboard-preview]]"));
+  assert.ok(lines.includes("Preview:"));
+  assert.ok(lines.includes("The workspace now has clearer output visibility in the dashboard."));
+});
+
+test("buildAskWorkflowSummaryLines skips slide separators in dashboard previews", () => {
+  const lines = buildAskWorkflowSummaryLines({
+    question: "Turn this into slides",
+    format: "slides",
+    outputPath: "outputs/slides/weekly-brief.md",
+    outputMarkdown: [
+      "---",
+      "marp: true",
+      "theme: default",
+      "---",
+      "",
+      "# Weekly Brief",
+      "",
+      "## Slide One",
+      "- First point",
+      "",
+      "---",
+      "",
+      "## Slide Two",
+      "- Second point"
+    ].join("\n"),
+    vaultName: "vault"
+  });
+
+  assert.ok(lines.includes("## Slide One"));
+  assert.ok(lines.includes("- First point"));
+  assert.ok(!lines.includes("---"));
+  assert.ok(!lines.includes("- - First point"));
 });
 
 test("renderDashboardHubScreen stays ansi-free when color is disabled", () => {
