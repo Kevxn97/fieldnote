@@ -83,5 +83,28 @@
       ]
     },
     "relatedAssets": []
+  },
+  {
+    "id": "src_what-is-claude-managed-agents_ca6cace4",
+    "slug": "what-is-claude-managed-agents",
+    "title": "What is Claude Managed Agents?",
+    "kind": "text",
+    "originalPath": "/Users/kevin/Code/fieldnote/vault/Clippings/What is Claude Managed Agents?.md",
+    "storedPath": "raw/clips/what-is-claude-managed-agents.md",
+    "checksum": "ca6cace4918b80eb6e721d179036eed5ea43e1b5a98985d861e81d3a2dafb429",
+    "importedAt": "2026-04-10T19:22:01.453Z",
+    "metadata": {
+      "sourceUrl": "https://www.youtube.com/watch?v=NLWiIj47IdI",
+      "authors": [
+        "[[Claude]]"
+      ],
+      "published": "2026-04-09",
+      "created": "2026-04-10",
+      "description": "Claude Managed Agents is a suite of APIs for building production-ready agents. You define the tools, environments, and success criteria. Claude works until the job is done.Outcomes, multi-agent orch",
+      "tags": [
+        "clippings"
+      ]
+    },
+    "relatedAssets": []
   }
 ]

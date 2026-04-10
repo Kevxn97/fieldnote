@@ -22,6 +22,9 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/sources/learning-chatgpt-and-llms-from-a-former-openai-founding-member]] - This clipped article summarizes Andrej Karpathy’s February 2025 video “Deep Dive into LLMs like ChatGPT,” presenting LLMs as next-token predictors trained in th
 
 [truncated]
+- [[wiki/sources/what-is-claude-managed-agents]] - Claude Managed Agents is presented as a suite of APIs for building and deploying agents at scale. In the source, developers define agents by specifying tools, p
+
+[truncated]
 
 ## Entities
 - [[wiki/entities/agents-sdk]] - Agents SDK appears as a named entity associated with OpenAI’s practical guidance on building AI agents. In the available material, it is connected to agent cons
@@ -33,11 +36,20 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/entities/anthropic]] - Anthropic is the organization credited as the author of *Building Effective AI Agents* and is described there as developing guidance for reliable LLM agent syst
 
 [truncated]
+- [[wiki/entities/asana]] - Asana appears as an external service that Claude Managed Agents can post outputs to, using MCP servers as the integration mechanism. The available evidence is b
+
+[truncated]
 - [[wiki/entities/chrome-web-store]] - Chrome Web Store is an official installation location referenced for Obsidian Web Clipper on Chrome and other Chromium-based browsers.
 - [[wiki/entities/claude-agent-sdk]] - Claude Agent SDK is an Anthropic-related software development kit named in connection with Anthropic’s guidance on building LLM agents. The available evidence p
 
 [truncated]
+- [[wiki/entities/claude-managed-agents]] - Claude Managed Agents is a suite of APIs for building and deploying production-ready agents at scale. Developers define an agent’s tools, personas, capabilities
+
+[truncated]
 - [[wiki/entities/claude-sonnet-45]] - Claude Sonnet 4.5 is a named entity associated with Anthropic in material about building effective AI agents. The available evidence identifies it as relevant t
+
+[truncated]
+- [[wiki/entities/claude]] - Claude is the AI system described as carrying out agent work inside Claude Managed Agents. In the available description, developers define the tools, environmen
 
 [truncated]
 - [[wiki/entities/edge-add-ons]] - Edge Add-Ons is an official installation location listed for Obsidian Web Clipper, indicating it is a browser extension distribution channel associated with Mic
@@ -52,13 +64,22 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/entities/firefox-add-ons]] - Firefox Add-Ons is an official installation location linked from Obsidian Help for obtaining Obsidian Web Clipper on Firefox. In the cited material, it is assoc
 
 [truncated]
+- [[wiki/entities/github]] - GitHub appears as a repository host used as an input to Claude Managed Agents workflows. In the described example, a GitHub repository is mounted into an isolat
+
+[truncated]
 - [[wiki/entities/gpt-2]] - GPT-2 is a 2019 large language model referenced as an early scale anchor in an overview of how LLMs work. It is described as a 1.6B-parameter model trained on a
 
 [truncated]
 - [[wiki/entities/instructgpt]] - InstructGPT appears as an instruction-following, assistant-style language model in the training framework described by Andrej Karpathy: a model built on top of 
 
 [truncated]
+- [[wiki/entities/lighthouse]] - Lighthouse appears to be a website-performance auditing tool used in a Claude Managed Agents workflow. In the described example, it is pre-installed in a sandbo
+
+[truncated]
 - [[wiki/entities/llama-3]] - Llama 3 is described as a large language model family used as a scale anchor in explanations of modern LLMs, spanning 8B to 405B parameters and trained on 15T t
+
+[truncated]
+- [[wiki/entities/mcp-servers]] - MCP servers are integration endpoints used by Claude Managed Agents to connect agent workflows to external systems. In the available description, they are speci
 
 [truncated]
 - [[wiki/entities/model-context-protocol]] - Model Context Protocol is a protocol mentioned by Anthropic as one way for an augmented LLM to integrate third-party tools.
@@ -82,10 +103,16 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/entities/openai]] - OpenAI is an AI organization associated here with the GPT and ChatGPT line of large language models and with Andrej Karpathy, identified as a former founding me
 
 [truncated]
+- [[wiki/entities/puppeteer]] - Puppeteer is a tool described as being pre-installed in a Claude Managed Agents sandbox environment used for a website-performance task. In the available eviden
+
+[truncated]
 - [[wiki/entities/rivet]] - Rivet is a named entity mentioned in Anthropic’s *Building Effective AI Agents*, but the available evidence does not identify exactly what Rivet is or disambigu
 
 [truncated]
 - [[wiki/entities/safari-extensions]] - Safari Extensions is the Safari distribution channel listed for installing Obsidian Web Clipper. In this context, it refers to the official Safari install locat
+
+[truncated]
+- [[wiki/entities/slack]] - Slack is an external destination used by Claude Managed Agents workflows for posting outputs, apparently via MCP server integrations. In the available material,
 
 [truncated]
 - [[wiki/entities/strands-agents-sdk-by-aws]] - Strands Agents SDK by AWS is an AWS-associated agent SDK named in Anthropic’s *Building Effective AI Agents* as a relevant entity in the broader landscape of ag
@@ -108,6 +135,9 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/concepts/agent-computer-interface-aci]] - Agent-computer interface (ACI) is the tool and environment interface through which an LLM agent observes computer state, takes actions, and receives feedback, i
 
 [truncated]
+- [[wiki/concepts/agent-sessions]] - Agent sessions are the managed execution units used by Claude Managed Agents: a developer-created runtime in which Claude operates inside an isolated container 
+
+[truncated]
 - [[wiki/concepts/agentic-systems]] - Agentic systems are LLM-based systems that go beyond a single model call by combining models with tools, retrieval, memory, and multi-step control. The term is 
 
 [truncated]
@@ -126,6 +156,9 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/concepts/evaluator-optimizer]] - Evaluator-optimizer is a workflow pattern in Anthropic’s taxonomy of agentic systems: a predefined orchestration of LLM calls and tools, listed alongside prompt
 
 [truncated]
+- [[wiki/concepts/event-streaming]] - Event streaming is the real-time delivery of agent activity back to the application, especially tool calls emitted while a managed agent session is running insi
+
+[truncated]
 - [[wiki/concepts/guardrails]] - Guardrails are the explicit safety and control mechanisms that bound how an AI agent operates, including layered checks such as relevance and safety classifiers
 
 [truncated]
@@ -138,10 +171,19 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/concepts/in-context-learning]] - In-context learning is the use of prompt-time context to shape an LLM’s next-token predictions without changing its underlying parameters. In the documented usa
 
 [truncated]
+- [[wiki/concepts/isolated-containers]] - Isolated containers are sandboxed execution environments used by Claude Managed Agents to run agent sessions with filesystem access, bash execution, web search,
+
+[truncated]
 - [[wiki/concepts/local-first-saving]] - Local-first saving is the model in which captured web content is saved directly to a user’s Obsidian vault on the user’s device, with no collection of user data
 
 [truncated]
 - [[wiki/concepts/manager-pattern]] - The manager pattern is a multi-agent orchestration approach in which a central manager agent controls workflow execution and delegates sub-tasks to specialized 
+
+[truncated]
+- [[wiki/concepts/memory-stores]] - Memory stores are persistent memory capabilities associated with Claude Managed Agents that let information carry across agent work beyond a single session, tho
+
+[truncated]
+- [[wiki/concepts/multi-agent-coordination]] - Multi-agent coordination is the orchestration of multiple agent sessions or specialist agents to work on related tasks in parallel or in sequence, with defined 
 
 [truncated]
 - [[wiki/concepts/multi-agent-systems]] - Multi-agent systems are agent architectures in which multiple LLM-based agents coordinate to complete a workflow, typically by dividing responsibilities across 
@@ -154,6 +196,9 @@ Content-oriented inventory of the wiki with one-line summaries.
 
 [truncated]
 - [[wiki/concepts/orchestrator-workers]] - Orchestrator-workers is a workflow pattern in Anthropic’s taxonomy of LLM system design. It belongs to the class of predefined orchestration patterns—rather tha
+
+[truncated]
+- [[wiki/concepts/parallel-task-execution]] - Parallel task execution is the ability to run multiple agent sessions at the same time, with each session operating in its own isolated container on a separate 
 
 [truncated]
 - [[wiki/concepts/parallelization]] - Parallelization is a workflow pattern in LLM systems where multiple model calls are run concurrently along predefined paths, typically either by splitting a tas
@@ -177,7 +222,13 @@ Content-oriented inventory of the wiki with one-line summaries.
 - [[wiki/concepts/routing]] - Routing is a workflow pattern in LLM-based systems in which task handling follows predefined code paths rather than fully model-directed control. In this contex
 
 [truncated]
+- [[wiki/concepts/rubric-based-evaluation]] - Rubric-based evaluation is a way of determining whether an agent task is complete by checking outputs against explicit success criteria, such as measurable perf
+
+[truncated]
 - [[wiki/concepts/sampling-vs-greedy-decoding]] - Sampling vs. greedy decoding are two ways an LLM turns its next-token probability distribution into actual output during inference. Greedy decoding follows the 
+
+[truncated]
+- [[wiki/concepts/sandbox-environments]] - Sandbox environments are the isolated execution setups used by managed agents, defined by developers to include specific tools, packages, and network controls, 
 
 [truncated]
 - [[wiki/concepts/single-agent-systems]] - Single-agent systems are agent architectures in which one LLM-driven agent manages the workflow for a task, uses available tools to gather information or take a

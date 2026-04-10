@@ -16,11 +16,20 @@ tags:
 - [[wiki/entities/anthropic]] - Anthropic is the organization credited as the author of *Building Effective AI Agents* and is described there as developing guidance for reliable LLM agent syst
 
 [truncated]
+- [[wiki/entities/asana]] - Asana appears as an external service that Claude Managed Agents can post outputs to, using MCP servers as the integration mechanism. The available evidence is b
+
+[truncated]
 - [[wiki/entities/chrome-web-store]] - Chrome Web Store is an official installation location referenced for Obsidian Web Clipper on Chrome and other Chromium-based browsers.
 - [[wiki/entities/claude-agent-sdk]] - Claude Agent SDK is an Anthropic-related software development kit named in connection with Anthropic’s guidance on building LLM agents. The available evidence p
 
 [truncated]
+- [[wiki/entities/claude-managed-agents]] - Claude Managed Agents is a suite of APIs for building and deploying production-ready agents at scale. Developers define an agent’s tools, personas, capabilities
+
+[truncated]
 - [[wiki/entities/claude-sonnet-45]] - Claude Sonnet 4.5 is a named entity associated with Anthropic in material about building effective AI agents. The available evidence identifies it as relevant t
+
+[truncated]
+- [[wiki/entities/claude]] - Claude is the AI system described as carrying out agent work inside Claude Managed Agents. In the available description, developers define the tools, environmen
 
 [truncated]
 - [[wiki/entities/edge-add-ons]] - Edge Add-Ons is an official installation location listed for Obsidian Web Clipper, indicating it is a browser extension distribution channel associated with Mic
@@ -35,13 +44,22 @@ tags:
 - [[wiki/entities/firefox-add-ons]] - Firefox Add-Ons is an official installation location linked from Obsidian Help for obtaining Obsidian Web Clipper on Firefox. In the cited material, it is assoc
 
 [truncated]
+- [[wiki/entities/github]] - GitHub appears as a repository host used as an input to Claude Managed Agents workflows. In the described example, a GitHub repository is mounted into an isolat
+
+[truncated]
 - [[wiki/entities/gpt-2]] - GPT-2 is a 2019 large language model referenced as an early scale anchor in an overview of how LLMs work. It is described as a 1.6B-parameter model trained on a
 
 [truncated]
 - [[wiki/entities/instructgpt]] - InstructGPT appears as an instruction-following, assistant-style language model in the training framework described by Andrej Karpathy: a model built on top of 
 
 [truncated]
+- [[wiki/entities/lighthouse]] - Lighthouse appears to be a website-performance auditing tool used in a Claude Managed Agents workflow. In the described example, it is pre-installed in a sandbo
+
+[truncated]
 - [[wiki/entities/llama-3]] - Llama 3 is described as a large language model family used as a scale anchor in explanations of modern LLMs, spanning 8B to 405B parameters and trained on 15T t
+
+[truncated]
+- [[wiki/entities/mcp-servers]] - MCP servers are integration endpoints used by Claude Managed Agents to connect agent workflows to external systems. In the available description, they are speci
 
 [truncated]
 - [[wiki/entities/model-context-protocol]] - Model Context Protocol is a protocol mentioned by Anthropic as one way for an augmented LLM to integrate third-party tools.
@@ -65,10 +83,16 @@ tags:
 - [[wiki/entities/openai]] - OpenAI is an AI organization associated here with the GPT and ChatGPT line of large language models and with Andrej Karpathy, identified as a former founding me
 
 [truncated]
+- [[wiki/entities/puppeteer]] - Puppeteer is a tool described as being pre-installed in a Claude Managed Agents sandbox environment used for a website-performance task. In the available eviden
+
+[truncated]
 - [[wiki/entities/rivet]] - Rivet is a named entity mentioned in Anthropic’s *Building Effective AI Agents*, but the available evidence does not identify exactly what Rivet is or disambigu
 
 [truncated]
 - [[wiki/entities/safari-extensions]] - Safari Extensions is the Safari distribution channel listed for installing Obsidian Web Clipper. In this context, it refers to the official Safari install locat
+
+[truncated]
+- [[wiki/entities/slack]] - Slack is an external destination used by Claude Managed Agents workflows for posting outputs, apparently via MCP server integrations. In the available material,
 
 [truncated]
 - [[wiki/entities/strands-agents-sdk-by-aws]] - Strands Agents SDK by AWS is an AWS-associated agent SDK named in Anthropic’s *Building Effective AI Agents* as a relevant entity in the broader landscape of ag

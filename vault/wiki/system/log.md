@@ -26,3 +26,24 @@ Append-only operational history for ingests, syncs, queries, and health passes.
 - Summary: Generated a answer answer.
 - Files:
   - [[outputs/answers/2026-04-05-answer-explain-multi-agent-systems]]
+
+## [2026-04-10 19:22] ingest | What is Claude Managed Agents?
+- Summary: Added latest source into raw/clips/what-is-claude-managed-agents.md.
+- Files:
+  - [[raw/clips/what-is-claude-managed-agents]]
+
+## [2026-04-10 19:24] sync | Vault sync
+- Summary: Synced 1 changed source(s) with a targeted graph refresh.
+- Files:
+  - [[wiki/sources/what-is-claude-managed-agents]]
+  - [[wiki/entities/claude-managed-agents]]
+  - [[wiki/entities/claude]]
+  - [[wiki/entities/github]]
+  - [[wiki/entities/lighthouse]]
+  - [[wiki/entities/puppeteer]]
+  - [[wiki/entities/slack]]
+  - [[wiki/entities/asana]]
+  - [[wiki/entities/mcp-servers]]
+  - [[wiki/concepts/agent-sessions]]
+  - [[wiki/concepts/sandbox-environments]]
+  - [[wiki/concepts/isolated-containers]]

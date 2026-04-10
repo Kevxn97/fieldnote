@@ -19,6 +19,11 @@
       "checksum": "fda4e0a1509570168d5f266ef8205cf454eeec7dfa3dbf30d07558287d381844",
       "pagePath": "wiki/sources/learning-chatgpt-and-llms-from-a-former-openai-founding-member.md",
       "compiledAt": "2026-04-05T19:39:43.726Z"
+    },
+    "src_what-is-claude-managed-agents_ca6cace4": {
+      "checksum": "ca6cace4918b80eb6e721d179036eed5ea43e1b5a98985d861e81d3a2dafb429",
+      "pagePath": "wiki/sources/what-is-claude-managed-agents.md",
+      "compiledAt": "2026-04-10T19:22:39.055Z"
     }
   },
   "entityPages": {
@@ -141,6 +146,38 @@
     "InstructGPT": {
       "pagePath": "wiki/entities/instructgpt.md",
       "compiledAt": "2026-04-05T19:47:01.915Z"
+    },
+    "Claude Managed Agents": {
+      "pagePath": "wiki/entities/claude-managed-agents.md",
+      "compiledAt": "2026-04-10T19:22:48.703Z"
+    },
+    "Claude": {
+      "pagePath": "wiki/entities/claude.md",
+      "compiledAt": "2026-04-10T19:22:52.289Z"
+    },
+    "GitHub": {
+      "pagePath": "wiki/entities/github.md",
+      "compiledAt": "2026-04-10T19:22:58.208Z"
+    },
+    "Lighthouse": {
+      "pagePath": "wiki/entities/lighthouse.md",
+      "compiledAt": "2026-04-10T19:23:04.639Z"
+    },
+    "Puppeteer": {
+      "pagePath": "wiki/entities/puppeteer.md",
+      "compiledAt": "2026-04-10T19:23:07.379Z"
+    },
+    "Slack": {
+      "pagePath": "wiki/entities/slack.md",
+      "compiledAt": "2026-04-10T19:23:13.131Z"
+    },
+    "Asana": {
+      "pagePath": "wiki/entities/asana.md",
+      "compiledAt": "2026-04-10T19:23:15.602Z"
+    },
+    "MCP servers": {
+      "pagePath": "wiki/entities/mcp-servers.md",
+      "compiledAt": "2026-04-10T19:23:23.475Z"
     }
   },
   "conceptPages": {
@@ -271,6 +308,38 @@
     "Reinforcement learning": {
       "pagePath": "wiki/concepts/reinforcement-learning.md",
       "compiledAt": "2026-04-05T19:56:22.634Z"
+    },
+    "Agent sessions": {
+      "pagePath": "wiki/concepts/agent-sessions.md",
+      "compiledAt": "2026-04-10T19:23:40.570Z"
+    },
+    "Sandbox environments": {
+      "pagePath": "wiki/concepts/sandbox-environments.md",
+      "compiledAt": "2026-04-10T19:23:38.071Z"
+    },
+    "Isolated containers": {
+      "pagePath": "wiki/concepts/isolated-containers.md",
+      "compiledAt": "2026-04-10T19:23:53.063Z"
+    },
+    "Rubric-based evaluation": {
+      "pagePath": "wiki/concepts/rubric-based-evaluation.md",
+      "compiledAt": "2026-04-10T19:23:53.106Z"
+    },
+    "Parallel task execution": {
+      "pagePath": "wiki/concepts/parallel-task-execution.md",
+      "compiledAt": "2026-04-10T19:24:08.319Z"
+    },
+    "Memory stores": {
+      "pagePath": "wiki/concepts/memory-stores.md",
+      "compiledAt": "2026-04-10T19:24:05.930Z"
+    },
+    "Multi-agent coordination": {
+      "pagePath": "wiki/concepts/multi-agent-coordination.md",
+      "compiledAt": "2026-04-10T19:24:23.165Z"
+    },
+    "Event streaming": {
+      "pagePath": "wiki/concepts/event-streaming.md",
+      "compiledAt": "2026-04-10T19:24:24.229Z"
     }
   }
 }

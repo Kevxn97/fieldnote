@@ -19,3 +19,6 @@ tags:
 - [[wiki/sources/learning-chatgpt-and-llms-from-a-former-openai-founding-member]] - This clipped article summarizes Andrej Karpathy’s February 2025 video “Deep Dive into LLMs like ChatGPT,” presenting LLMs as next-token predictors trained in th
 
 [truncated]
+- [[wiki/sources/what-is-claude-managed-agents]] - Claude Managed Agents is presented as a suite of APIs for building and deploying agents at scale. In the source, developers define agents by specifying tools, p
+
+[truncated]

@@ -1,16 +1,16 @@
 ---
 kind: "index"
-title: "LLM Knowledge Base"
+title: "Fieldnote"
 tags:
   - "index"
   - "home"
 ---
-# LLM Knowledge Base
+# Fieldnote
 
 ## Overview
-- Source pages: 4
-- Entity pages: 29
-- Concept pages: 32
+- Source pages: 5
+- Entity pages: 37
+- Concept pages: 40
 - Open questions: 0
 - Filed outputs: 0
 - Catalog: [[wiki/system/catalog]]
@@ -27,26 +27,26 @@ tags:
 - [[wiki/entities/agents-sdk]]
 - [[wiki/entities/andrej-karpathy]]
 - [[wiki/entities/anthropic]]
+- [[wiki/entities/asana]]
 - [[wiki/entities/chrome-web-store]]
 - [[wiki/entities/claude-agent-sdk]]
+- [[wiki/entities/claude-managed-agents]]
 - [[wiki/entities/claude-sonnet-45]]
+- [[wiki/entities/claude]]
 - [[wiki/entities/edge-add-ons]]
 - [[wiki/entities/eureka-labs]]
 - [[wiki/entities/fineweb]]
-- [[wiki/entities/firefox-add-ons]]
-- [[wiki/entities/gpt-2]]
-- [[wiki/entities/instructgpt]]
 
 ## Featured Concepts
 - [[wiki/concepts/agent-computer-interface-aci]]
+- [[wiki/concepts/agent-sessions]]
 - [[wiki/concepts/agentic-systems]]
 - [[wiki/concepts/ai-agents]]
 - [[wiki/concepts/augmented-llm]]
 - [[wiki/concepts/browser-extension-distribution]]
 - [[wiki/concepts/decentralized-handoffs]]
 - [[wiki/concepts/evaluator-optimizer]]
+- [[wiki/concepts/event-streaming]]
 - [[wiki/concepts/guardrails]]
 - [[wiki/concepts/highlighting]]
 - [[wiki/concepts/human-intervention]]
-- [[wiki/concepts/in-context-learning]]
-- [[wiki/concepts/local-first-saving]]
