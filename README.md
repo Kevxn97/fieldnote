@@ -167,6 +167,8 @@ kb dashboard --static
 kb /dashboard
 ```
 
+If `kb` is not found in your shell, run `npm run build && npm run install:kb` once from the repo root.
+
 The interactive hub is intentionally small and operational. It is there to show status and launch workflows such as:
 
 - `/import`
@@ -202,7 +204,10 @@ npm install
 cp .env.example .env
 # add OPENAI_API_KEY
 npm run build
+npm run install:kb
 ```
+
+`npm run install:kb` creates `~/.local/bin/kb` as a symlink to this repo's built CLI so `kb ...` works from a normal shell. If you prefer not to install the symlink yet, use `node dist/src/cli.js ...`.
 
 ### 2. Initialize the vault
 

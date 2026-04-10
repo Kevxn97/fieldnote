@@ -11,6 +11,7 @@
     "build": "tsc -p tsconfig.json",
     "check": "npm run build",
     "dev": "node --import tsx src/cli.ts",
+    "install:kb": "node scripts/install-kb.mjs",
     "dashboard": "node dist/src/cli.js dashboard",
     "start": "node dist/src/cli.js",
     "test": "node --import tsx --test tests/**/*.test.ts"

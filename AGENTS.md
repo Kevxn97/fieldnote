@@ -18,6 +18,7 @@ Repo-specific instructions for the `fieldnote` project.
 - `kb dashboard` is the preferred lightweight CLI control panel around the vault: inbox counts, wiki coverage, next actions, recent activity, reusable outputs, and prompt-driven actions.
 - `kb dashboard --static` is the preferred one-shot render for smoke tests and non-interactive verification.
 - `kb /dashboard` is a supported alias for the same terminal dashboard.
+- `npm run install:kb` is the supported one-time bootstrap for exposing the built CLI as `~/.local/bin/kb` when `~/.local/bin` is already on `PATH`.
 - `kb update` is the preferred one-shot daily inbox workflow for `vault/Clippings/`: import, run the fast incremental sync, then clear imported inbox files.
 - `kb sync` should stay fast and incremental for daily use: changed source pages plus targeted entity/concept refresh only.
 - `kb sync --deep` and `kb compile` are the explicit slower full-graph rebuild paths.

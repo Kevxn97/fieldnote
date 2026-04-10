@@ -21,3 +21,8 @@ Append-only operational history for ingests, syncs, queries, and health passes.
 - Summary: Generated a answer answer.
 - Files:
   - [[outputs/answers/2026-04-05-answer-wie-baut-man-mutli-agent-systeme]]
+
+## [2026-04-05 20:57] ask | explain multi-agent-systems
+- Summary: Generated a answer answer.
+- Files:
+  - [[outputs/answers/2026-04-05-answer-explain-multi-agent-systems]]
